@@ -1,0 +1,8 @@
+@INCLUDE                = "../Doxyfile"
+GENERATE_HTML           = NO
+GENERATE_XML            = YES
+GENERATE_LATEX          = NO
+XML_PROGRAMLISTING      = NO
+CPP_CLI_SUPPORT         = YES
+INPUT                   = ../../
+FILE_PATTERNS           = *.h

@@ -18,5 +18,3 @@ Once the virtual environment is ready, you can refresh documentation in the *bui
     git commit -m "Update Sphinx documentation"
     git push -f origin gh-pages
 ```
-
-To visit the published documentation, go to {link is WIP}.

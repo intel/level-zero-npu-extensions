@@ -178,6 +178,13 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphProfilingQueryGetData_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphProfilingLogGetString_ext_t)(
+    ze_graph_profiling_query_handle_t phProfilingQuery,         ///< [in] handle of the graph object
+    uint32_t* pSize,                                            ///< [in,out] pointer to the size of the error message
+    char* pProfilingLog                                         ///< [in] pointer to buffer to return error message
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of graph profiling functions pointers
 typedef struct _ze_graph_profiling_dditable_ext_t
 {
@@ -187,6 +194,7 @@ typedef struct _ze_graph_profiling_dditable_ext_t
     ze_pfnGraphProfilingQueryDestroy_ext_t          pfnProfilingQueryDestroy;
     ze_pfnGraphProfilingQueryGetData_ext_t          pfnProfilingQueryGetData;
     ze_pfnDeviceGetProfilingDataProperties_ext_t    pfnDeviceGetProfilingDataProperties;
+    ze_pfnGraphProfilingLogGetString_ext_t          pfnProfilingLogGetString;
 
 } ze_graph_profiling_dditable_ext_t;
 

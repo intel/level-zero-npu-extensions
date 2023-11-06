@@ -20,7 +20,8 @@
 #define ZE_GRAPH_EXT_NAME_1_2 "ZE_extension_graph_1_2"
 #define ZE_GRAPH_EXT_NAME_1_3 "ZE_extension_graph_1_3"
 #define ZE_GRAPH_EXT_NAME_1_4 "ZE_extension_graph_1_4"
-#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_4
+#define ZE_GRAPH_EXT_NAME_1_5 "ZE_extension_graph_1_5"
+#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_5
 #endif
 
 #if defined(__cplusplus)
@@ -40,13 +41,14 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_2 = ZE_MAKE_VERSION( 1, 2 ),         ///< version 1.2
     ZE_GRAPH_EXT_VERSION_1_3 = ZE_MAKE_VERSION( 1, 3 ),         ///< version 1.3
     ZE_GRAPH_EXT_VERSION_1_4 = ZE_MAKE_VERSION( 1, 4 ),         ///< version 1.4
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_4,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_5 = ZE_MAKE_VERSION( 1, 5 ),         ///< version 1.5
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_5,    ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Bitfield of supported graph creation input formats
+/// @brief Supported graph creation input formats
 typedef enum _ze_graph_format_t
 {
     ZE_GRAPH_FORMAT_NATIVE = 0x1,                   ///< Format is pre-compiled blob (elf, flatbuffers)
@@ -572,6 +574,114 @@ typedef struct _ze_graph_dditable_ext_1_4_t
     ze_pfnGraphBuildLogGetString_ext_t          pfnBuildLogGetString;
 
 } ze_graph_dditable_ext_1_4_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.5
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Bitfield of graph flags
+typedef enum _ze_graph_flags_t
+{
+    ZE_GRAPH_FLAG_NONE = 0x0,
+    ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,           ///< Disable driver managed caching
+    ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,          ///< Enable layer and task level timings
+
+} ze_graph_flags_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph descriptor
+typedef struct _ze_graph_desc_2_t
+{
+    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
+    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_format_t format;                       ///< [in] Graph format passed in with input
+    size_t inputSize;                               ///< [in] Size of input buffer in bytes
+    const uint8_t* pInput;                          ///< [in] Pointer to input buffer
+    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Following options are supported.
+                                                    ///< Note: comma delimited, no spaces for precision/layout arguments
+                                                    ///< -ze_graph_input_precision:precision,-ze_graph_output_precision:precision
+                                                    ///<     UNKNOWN, FP32, FP16, UINT16, UINT8, UINT4, INT32, INT16, INT8, INT4, BIN, BF16
+                                                    ///< -ze_graph_input_layout:layout,-ze_graph_output_layout:layout
+                                                    ///<     ANY, NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN, BLOCKED
+                                                    ///< -options:compile options string passed directly to compiler
+    uint32_t flags;                                 ///< [in][optional] Graph creation flags
+} ze_graph_desc_2_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_2_t)(
+    ze_context_handle_t hContext,                   ///< [in] handle of the context
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                  ///< [in] pointer to graph descriptor
+    ze_graph_handle_t* phGraph                      ///< [out] pointer to handle of graph object created
+    );
+
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkCreate_ext_2_t)(
+    ze_context_handle_t hContext,                         ///< [in] handle of the context object
+    ze_device_handle_t hDevice,                           ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                        ///< [in] pointer to graph descriptor
+    ze_graph_query_network_handle_t* phGraphQueryNetwork  ///< [out] pointer to handle of graph query network object created
+);
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph memory query types
+typedef enum _ze_graph_memory_query_type_t
+{
+    ZE_GRAPH_QUERY_MEMORY_DDR = 0x01,               ///< DDR memory allocations
+
+} ze_graph_memory_query_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph memory query
+typedef struct _ze_graph_memory_query_t
+{
+    uint64_t total;                                 ///< total memory of specified type
+    uint64_t allocated;                             ///< summed total of all allocations of type
+
+} ze_graph_memory_query_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryContextMemory_ext_t)(
+    ze_context_handle_t hContext,                   ///< [in] handle of the context object
+    ze_graph_memory_query_type_t type,              ///< [in] type of memory query
+    ze_graph_memory_query_t* query                  ///< [out] result of query
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Graph functions pointers
+typedef struct _ze_graph_dditable_ext_1_5_t
+{
+    // version 1.0
+    ze_pfnGraphCreate_ext_t                     pfnCreate;
+    ze_pfnGraphDestroy_ext_t                    pfnDestroy;
+    ze_pfnGraphGetProperties_ext_t              pfnGetProperties;
+    ze_pfnGraphGetArgumentProperties_ext_t      pfnGetArgumentProperties;
+    ze_pfnGraphSetArgumentValue_ext_t           pfnSetArgumentValue;
+    ze_pfnAppendGraphInitialize_ext_t           pfnAppendGraphInitialize;
+    ze_pfnAppendGraphExecute_ext_t              pfnAppendGraphExecute;
+    ze_pfnGraphGetNativeBinary_ext_t            pfnGetNativeBinary;
+    ze_pfnDeviceGetGraphProperties_ext_t        pfnDeviceGetGraphProperties;
+
+    // version 1.1
+    ze_pfnGraphGetArgumentMetadata_ext_t        pfnGraphGetArgumentMetadata;
+    ze_pfnGraphGetArgumentProperties_ext_2_t    pfnGetArgumentProperties2;
+
+    // version 1.2
+    ze_pfnGraphGetArgumentProperties_ext_3_t    pfnGetArgumentProperties3;
+
+    // version 1.3
+    ze_pfnGraphQueryNetworkCreate_ext_t             pfnQueryNetworkCreate;
+    ze_pfnGraphQueryNetworkDestroy_ext_t            pfnQueryNetworkDestroy;
+    ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t pfnQueryNetworkGetSupportedLayers;
+
+    // version 1.4
+    ze_pfnGraphBuildLogGetString_ext_t          pfnBuildLogGetString;
+
+    // version 1.5
+    ze_pfnGraphCreate_ext_2_t                   pfnCreate2;
+    ze_pfnGraphQueryNetworkCreate_ext_2_t       pfnQueryNetworkCreate2;
+    ze_pfnGraphQueryContextMemory_ext_t         pfnQueryContextMemory;
+
+} ze_graph_dditable_ext_1_5_t;
 
 #if defined(__cplusplus)
 } // extern "C"

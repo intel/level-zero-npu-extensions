@@ -689,24 +689,14 @@ typedef struct _ze_graph_dditable_ext_1_5_t
 /// @brief Extension version 1.6
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Elf container version information
-typedef struct _ze_graph_elf_version_info_t
+/// @brief Graph version information
+typedef struct _ze_graph_version_info_t
 {
-    uint8_t major;
-    uint8_t minor;
-    uint16_t patch;
+    uint32_t major;
+    uint32_t minor;
+    uint32_t patch;
 
-} ze_graph_elf_version_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Runtime version information
-typedef struct _ze_graph_runtime_version_info_t
-{
-    uint8_t major;
-    uint8_t minor;
-    uint16_t patch;
-
-} ze_graph_runtime_version_info_t;
+} ze_graph_version_info_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device graph properties
@@ -716,10 +706,10 @@ typedef struct _ze_device_graph_properties_2_t
     void* pNext;                                        ///< [in,out][optional] must be null or a pointer to an extension-specific
     ze_graph_ext_version_t graphExtensionVersion;       ///< [out] graph extension version
     ze_graph_compiler_version_info_t compilerVersion;   ///< [out] compiler version
-    ze_graph_elf_version_info_t elfVersion;             ///< [out] elf container version
-    ze_graph_runtime_version_info_t runtimeVersion;     ///< [out] firmware runtime version
     ze_graph_format_t graphFormatsSupported;            ///< [out] graph formats supported
     uint32_t maxOVOpsetVersionSupported;                ///< [out] max OV opset version supported by the compiler
+    ze_graph_version_info_t elfVersion;                 ///< [out] elf container version
+    ze_graph_version_info_t runtimeVersion;             ///< [out] firmware runtime version
 
 } ze_device_graph_properties_2_t;
 

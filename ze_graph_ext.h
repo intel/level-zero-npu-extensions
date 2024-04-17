@@ -21,7 +21,8 @@
 #define ZE_GRAPH_EXT_NAME_1_3 "ZE_extension_graph_1_3"
 #define ZE_GRAPH_EXT_NAME_1_4 "ZE_extension_graph_1_4"
 #define ZE_GRAPH_EXT_NAME_1_5 "ZE_extension_graph_1_5"
-#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_5
+#define ZE_GRAPH_EXT_NAME_1_6 "ZE_extension_graph_1_6"
+#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_6
 #endif
 
 #if defined(__cplusplus)
@@ -42,7 +43,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_3 = ZE_MAKE_VERSION( 1, 3 ),         ///< version 1.3
     ZE_GRAPH_EXT_VERSION_1_4 = ZE_MAKE_VERSION( 1, 4 ),         ///< version 1.4
     ZE_GRAPH_EXT_VERSION_1_5 = ZE_MAKE_VERSION( 1, 5 ),         ///< version 1.5
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_5,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_6 = ZE_MAKE_VERSION( 1, 6 ),         ///< version 1.6
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_6,    ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -57,7 +59,7 @@ typedef enum _ze_graph_format_t
 } ze_graph_format_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Version information
+/// @brief Compiler version information
 typedef struct _ze_graph_compiler_version_info_t
 {
     uint16_t major;
@@ -178,7 +180,7 @@ typedef struct _ze_graph_desc_t
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Example ze_graph_desc pBuildFlags
 ///
-/// -ze_graph_input_precision:UINT8,-ze_graph_input_layout:NCHW,-ze_graph_output_precision:UINT8,-ze_graph_output_layout:NCHW,-options:VPUX_COMPILATION_MODE DefaultHW PERF_COUNT YES
+/// -ze_graph_input_precision:UINT8,-ze_graph_input_layout:NCHW,-ze_graph_output_precision:UINT8,-ze_graph_output_layout:NCHW,-options:NPU_COMPILATION_MODE DefaultHW PERF_COUNT YES
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -682,6 +684,80 @@ typedef struct _ze_graph_dditable_ext_1_5_t
     ze_pfnGraphQueryContextMemory_ext_t         pfnQueryContextMemory;
 
 } ze_graph_dditable_ext_1_5_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.6
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph version information
+typedef struct _ze_graph_version_info_t
+{
+    uint32_t major;
+    uint32_t minor;
+    uint32_t patch;
+
+} ze_graph_version_info_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device graph properties
+typedef struct _ze_device_graph_properties_2_t
+{
+    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
+    void* pNext;                                        ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_ext_version_t graphExtensionVersion;       ///< [out] graph extension version
+    ze_graph_compiler_version_info_t compilerVersion;   ///< [out] compiler version
+    ze_graph_format_t graphFormatsSupported;            ///< [out] graph formats supported
+    uint32_t maxOVOpsetVersionSupported;                ///< [out] max OV opset version supported by the compiler
+    ze_graph_version_info_t elfVersion;                 ///< [out] elf container version
+    ze_graph_version_info_t runtimeVersion;             ///< [out] firmware runtime version
+
+} ze_device_graph_properties_2_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_2_t)(
+    ze_device_handle_t hDevice,                             ///< [in] handle of the device
+    ze_device_graph_properties_2_t *pDeviceGraphProperties  ///< [out] query result for graph properties of the device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Graph functions pointers
+typedef struct _ze_graph_dditable_ext_1_6_t
+{
+    // version 1.0
+    ze_pfnGraphCreate_ext_t                     pfnCreate;
+    ze_pfnGraphDestroy_ext_t                    pfnDestroy;
+    ze_pfnGraphGetProperties_ext_t              pfnGetProperties;
+    ze_pfnGraphGetArgumentProperties_ext_t      pfnGetArgumentProperties;
+    ze_pfnGraphSetArgumentValue_ext_t           pfnSetArgumentValue;
+    ze_pfnAppendGraphInitialize_ext_t           pfnAppendGraphInitialize;
+    ze_pfnAppendGraphExecute_ext_t              pfnAppendGraphExecute;
+    ze_pfnGraphGetNativeBinary_ext_t            pfnGetNativeBinary;
+    ze_pfnDeviceGetGraphProperties_ext_t        pfnDeviceGetGraphProperties;
+
+    // version 1.1
+    ze_pfnGraphGetArgumentMetadata_ext_t        pfnGraphGetArgumentMetadata;
+    ze_pfnGraphGetArgumentProperties_ext_2_t    pfnGetArgumentProperties2;
+
+    // version 1.2
+    ze_pfnGraphGetArgumentProperties_ext_3_t    pfnGetArgumentProperties3;
+
+    // version 1.3
+    ze_pfnGraphQueryNetworkCreate_ext_t             pfnQueryNetworkCreate;
+    ze_pfnGraphQueryNetworkDestroy_ext_t            pfnQueryNetworkDestroy;
+    ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t pfnQueryNetworkGetSupportedLayers;
+
+    // version 1.4
+    ze_pfnGraphBuildLogGetString_ext_t          pfnBuildLogGetString;
+
+    // version 1.5
+    ze_pfnGraphCreate_ext_2_t                   pfnCreate2;
+    ze_pfnGraphQueryNetworkCreate_ext_2_t       pfnQueryNetworkCreate2;
+    ze_pfnGraphQueryContextMemory_ext_t         pfnQueryContextMemory;
+
+    // version 1.6
+    ze_pfnDeviceGetGraphProperties_ext_2_t      pfnDeviceGetGraphProperties2;
+
+} ze_graph_dditable_ext_1_6_t;
 
 #if defined(__cplusplus)
 } // extern "C"

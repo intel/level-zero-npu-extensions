@@ -168,19 +168,23 @@ typedef struct _ze_graph_desc_t
     ze_graph_format_t format;                       ///< [in] Graph format passed in with input
     size_t inputSize;                               ///< [in] Size of input buffer in bytes
     const uint8_t* pInput;                          ///< [in] Pointer to input buffer
-    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Following options are supported.
-                                                    ///< Note: comma delimited, no spaces for precision/layout arguments
-                                                    ///< -ze_graph_input_precision:precision,-ze_graph_output_precision:precision
-                                                    ///<     UNKNOWN, FP32, FP16, UINT16, UINT8, UINT4, INT32, INT16, INT8, INT4, BIN, BF16
-                                                    ///< -ze_graph_input_layout:layout,-ze_graph_output_layout:layout
-                                                    ///<     ANY, NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN, BLOCKED
-                                                    ///< -options:compile options string passed directly to compiler
+    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Options:
+                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                    ///<   - Set input and output arguments precision. Supported precisions:
+                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
+                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                    ///<   - Set input and output arguments layout. Supported layouts:
+                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
+                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
+                                                    ///<   - compile options string passed directly to compiler
 } ze_graph_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Example ze_graph_desc pBuildFlags
 ///
-/// -ze_graph_input_precision:UINT8,-ze_graph_input_layout:NCHW,-ze_graph_output_precision:UINT8,-ze_graph_output_layout:NCHW,-options:NPU_COMPILATION_MODE DefaultHW PERF_COUNT YES
+/// --inputs_precisions="in1:U8" --inputs_layouts="in1:NCHW" --outputs_precisions="out1:FP16 out2:FP16" --outputs_layouts="out1:NCHW out2:NCHW" --config PERFORMANCE_HINT="THROUGHPUT"
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -599,13 +603,17 @@ typedef struct _ze_graph_desc_2_t
     ze_graph_format_t format;                       ///< [in] Graph format passed in with input
     size_t inputSize;                               ///< [in] Size of input buffer in bytes
     const uint8_t* pInput;                          ///< [in] Pointer to input buffer
-    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Following options are supported.
-                                                    ///< Note: comma delimited, no spaces for precision/layout arguments
-                                                    ///< -ze_graph_input_precision:precision,-ze_graph_output_precision:precision
-                                                    ///<     UNKNOWN, FP32, FP16, UINT16, UINT8, UINT4, INT32, INT16, INT8, INT4, BIN, BF16
-                                                    ///< -ze_graph_input_layout:layout,-ze_graph_output_layout:layout
-                                                    ///<     ANY, NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN, BLOCKED
-                                                    ///< -options:compile options string passed directly to compiler
+    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Options:
+                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                    ///<   - Set input and output arguments precision. Supported precisions:
+                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
+                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                    ///<   - Set input and output arguments layout. Supported layouts:
+                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
+                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
+                                                    ///<   - compile options string passed directly to compiler
     uint32_t flags;                                 ///< [in][optional] Graph creation flags
 } ze_graph_desc_2_t;
 

@@ -767,6 +767,25 @@ typedef struct _ze_graph_dditable_ext_1_6_t
 
 } ze_graph_dditable_ext_1_6_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable command lists NPU specific flags and structures
+#define ZE_MUTABLE_COMMAND_EXP_FLAG_INFERENCE_EXECUTE 0x40
+#define ZE_STRUCTURE_TYPE_MUTABLE_INFERENCE_EXECUTE_EXP_DESC 0x00030001
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable inference execute descriptor
+typedef struct _ze_mutable_inference_execute_exp_desc_t
+{
+    ze_structure_type_t stype;                          ///< [in] type of this structure
+    const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
+                                                        ///< structure (i.e. contains stype and pNext).
+    uint64_t commandId;                                 ///< [in] command identifier
+    ze_graph_handle_t hGraph;                           ///< [in] handle of the graph
+    ze_graph_profiling_query_handle_t hProfilingQuery;  ///< [in][optional] handle of profiling query
+
+
+} ze_mutable_inference_execute_exp_desc_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

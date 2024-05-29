@@ -71,12 +71,14 @@ typedef struct _ze_graph_compiler_version_info_t
 /// @brief Defines structure types
 typedef enum _ze_structure_type_graph_ext_t
 {
-    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,    ///< ::ze_device_graph_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_DESC_PROPERTIES = 0x2,      ///< ::ze_graph_desc_t
-    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES = 0x3,           ///< ::ze_graph_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,  ///< ::ze_graph_argument_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,    ///< ::ze_graph_activation_kernel_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,    ///< ::ze_graph_argument_metadata_t
+    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,                ///< ::ze_device_graph_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_DESC_PROPERTIES = 0x2,                  ///< ::ze_graph_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES = 0x3,                       ///< ::ze_graph_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,              ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                ///< ::ze_graph_activation_kernel_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
+    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC = 0x7,        ///< ::ze_mutable_graph_argument_exp_desc_t
+    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_PROFILING_QUERY_EXP_DESC = 0x8  ///< ::ze_mutable_graph_profiling_query_exp_desc_t
 
 } ze_structure_type_graph_ext_t;
 
@@ -766,6 +768,40 @@ typedef struct _ze_graph_dditable_ext_1_6_t
     ze_pfnDeviceGetGraphProperties_ext_2_t      pfnDeviceGetGraphProperties2;
 
 } ze_graph_dditable_ext_1_6_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable command lists NPU specific flags and structures
+typedef enum _ze_mutable_command_npu_exp_flag_t
+{
+    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENT = ZE_BIT(6),         ///< graph argument
+    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_PROFILING_QUERY = ZE_BIT(7),  ///< graph profiling query
+
+} ze_mutable_command_npu_exp_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable graph argument descriptor
+typedef struct _ze_mutable_graph_argument_exp_desc_t
+{
+    ze_structure_type_t stype;                          ///< [in] type of this structure
+    const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
+                                                        ///< structure (i.e. contains stype and pNext).
+    uint64_t commandId;                                 ///< [in] command identifier
+    uint32_t argIndex;                                  ///< [in] index of the argument
+    const void* pArgValue;                              ///< [in] value to bind to the index
+
+} ze_mutable_graph_argument_exp_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable graph profiling query descriptor
+typedef struct _ze_mutable_graph_profiling_query_exp_desc_t
+{
+    ze_structure_type_t stype;                          ///< [in] type of this structure
+    const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
+                                                        ///< structure (i.e. contains stype and pNext).
+    uint64_t commandId;                                 ///< [in] command identifier
+    ze_graph_profiling_query_handle_t hProfilingQuery;  ///< [in] handle of profiling query
+
+} ze_mutable_graph_profiling_query_exp_desc_t;
 
 #if defined(__cplusplus)
 } // extern "C"

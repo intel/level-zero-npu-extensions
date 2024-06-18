@@ -45,7 +45,7 @@ typedef enum _ze_command_queue_workload_type_t
 } ze_command_queue_workload_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetPriority_ext_t)(
+typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetWorkloadType_ext_t)(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the device
     ze_command_queue_workload_type_t workloadType,  ///< [in] workload type
     );

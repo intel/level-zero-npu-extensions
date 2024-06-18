@@ -782,7 +782,7 @@ typedef enum _ze_mutable_command_npu_exp_flag_t
 /// @brief Mutable graph argument descriptor
 typedef struct _ze_mutable_graph_argument_exp_desc_t
 {
-    ze_structure_type_t stype;                          ///< [in] type of this structure
+    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
     const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
                                                         ///< structure (i.e. contains stype and pNext).
     uint64_t commandId;                                 ///< [in] command identifier
@@ -795,7 +795,7 @@ typedef struct _ze_mutable_graph_argument_exp_desc_t
 /// @brief Mutable graph profiling query descriptor
 typedef struct _ze_mutable_graph_profiling_query_exp_desc_t
 {
-    ze_structure_type_t stype;                          ///< [in] type of this structure
+    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
     const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
                                                         ///< structure (i.e. contains stype and pNext).
     uint64_t commandId;                                 ///< [in] command identifier

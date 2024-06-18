@@ -45,9 +45,9 @@ typedef enum _ze_command_queue_workload_type_t
 } ze_command_queue_workload_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetPriority_ext_t)(
+typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetWorkloadType_ext_t)(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the device
-    ze_command_queue_workload_type_t workloadType,  ///< [in] workload type
+    ze_command_queue_workload_type_t workloadType  ///< [in] workload type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ typedef struct _ze_command_queue_npu_dditable_ext_1_0_t
 {
     // version 1.0
     ze_pfnCommandQueueSetWorkloadType_ext_t pfnSetWorkloadType;
-};
+} ze_command_queue_npu_dditable_ext_1_0_t;
 
 #if defined(__cplusplus)
 } // extern "C"

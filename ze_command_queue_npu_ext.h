@@ -34,6 +34,25 @@ typedef enum _ze_command_queue_npu_ext_version_t
 } ze_command_queue_npu_ext_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Defines structure types
+typedef enum _ze_structure_type_command_queue_npu_ext_t
+{
+    ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESC_NPU_EXT = 0x1,     ///< ::_ze_command_queue_desc_npu_ext_t
+
+} ze_structure_type_command_queue_npu_ext_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief NPU command queue descriptor npu extension
+typedef struct _ze_command_queue_desc_npu_ext_t
+{
+    ze_structure_type_command_queue_npu_ext_t stype;        ///< [in] type of this structure
+    const void* pNext;                                      ///< [in][optional] must be null or a pointer to an extension-specific
+                                                            ///< structure (i.e. contains stype and pNext).
+    bool turbo;                                             ///< [in] command queue context turbo mode
+
+} ze_command_queue_desc_npu_ext_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue Workload Type
 typedef enum _ze_command_queue_workload_type_t
 {

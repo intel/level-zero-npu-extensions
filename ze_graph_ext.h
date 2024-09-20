@@ -780,6 +780,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_2_t)(
     ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
     size_t* pSize,                                  ///< [out] size of native binary in bytes
     uint8_t** pGraphNativeBinary                    ///< [out] double byte pointer to native binary, driver owns the memory
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers

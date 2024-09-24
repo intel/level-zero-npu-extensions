@@ -23,7 +23,8 @@
 #define ZE_GRAPH_EXT_NAME_1_5 "ZE_extension_graph_1_5"
 #define ZE_GRAPH_EXT_NAME_1_6 "ZE_extension_graph_1_6"
 #define ZE_GRAPH_EXT_NAME_1_7 "ZE_extension_graph_1_7"
-#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_7
+#define ZE_GRAPH_EXT_NAME_1_8 "ZE_extension_graph_1_8"
+#define ZE_GRAPH_EXT_NAME_CURRENT ZE_GRAPH_EXT_NAME_1_8
 #endif
 
 #if defined(__cplusplus)
@@ -46,7 +47,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_5 = ZE_MAKE_VERSION( 1, 5 ),         ///< version 1.5
     ZE_GRAPH_EXT_VERSION_1_6 = ZE_MAKE_VERSION( 1, 6 ),         ///< version 1.6
     ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),         ///< version 1.7
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_7,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_8,    ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -775,11 +777,10 @@ typedef struct _ze_graph_dditable_ext_1_6_t
 /// @brief Extension version 1.7
 
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_2_t)(
     ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
     size_t* pSize,                                  ///< [out] size of native binary in bytes
-    uint8_t** pGraphNativeBinary                    ///< [out] double byte pointer to native binary, driver owns the memory
+    const uint8_t** pGraphNativeBinary              ///< [out] double pointer to view of native binary, driver owns the memory
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -824,6 +825,88 @@ typedef struct _ze_graph_dditable_ext_1_7_t
     ze_pfnGraphGetNativeBinary_ext_2_t          pfnGetNativeBinary2;
 
 } ze_graph_dditable_ext_1_7_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.8
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Stage required to initialize the graph
+typedef enum _ze_graph_init_stage_t
+{
+    ZE_GRAPH_STAGE_COMMAND_LIST_INITIALIZE = 0x1,   ///< Call to pfnAppendGraphInitialize is required
+    ZE_GRAPH_STAGE_INITIALIZE = 0x2,                ///< Call to pfnGraphInitialize is required
+    ZE_GRAPH_STAGE_FORCE_UINT32 = 0x7fffffff
+
+} ze_graph_init_stage_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph properties
+typedef struct _ze_graph_properties_2_t
+{
+    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
+    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t numGraphArgs;                          ///< [out] number of graph arguments
+    ze_graph_init_stage_t initStageRequired;        ///< [out] stage required to initialize the graph
+
+} ze_graph_properties_2_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_2_t)(
+    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
+    ze_graph_properties_2_t* pGraphProperties       ///< [in,out] query result for graph properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
+    ze_graph_handle_t hGraph                        ///< [in] handle of the graph
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Graph functions pointers
+typedef struct _ze_graph_dditable_ext_1_8_t
+{
+    // version 1.0
+    ze_pfnGraphCreate_ext_t                     pfnCreate;
+    ze_pfnGraphDestroy_ext_t                    pfnDestroy;
+    ze_pfnGraphGetProperties_ext_t              pfnGetProperties;
+    ze_pfnGraphGetArgumentProperties_ext_t      pfnGetArgumentProperties;
+    ze_pfnGraphSetArgumentValue_ext_t           pfnSetArgumentValue;
+    ze_pfnAppendGraphInitialize_ext_t           pfnAppendGraphInitialize;
+    ze_pfnAppendGraphExecute_ext_t              pfnAppendGraphExecute;
+    ze_pfnGraphGetNativeBinary_ext_t            pfnGetNativeBinary;
+    ze_pfnDeviceGetGraphProperties_ext_t        pfnDeviceGetGraphProperties;
+
+    // version 1.1
+    ze_pfnGraphGetArgumentMetadata_ext_t        pfnGraphGetArgumentMetadata;
+    ze_pfnGraphGetArgumentProperties_ext_2_t    pfnGetArgumentProperties2;
+
+    // version 1.2
+    ze_pfnGraphGetArgumentProperties_ext_3_t    pfnGetArgumentProperties3;
+
+    // version 1.3
+    ze_pfnGraphQueryNetworkCreate_ext_t             pfnQueryNetworkCreate;
+    ze_pfnGraphQueryNetworkDestroy_ext_t            pfnQueryNetworkDestroy;
+    ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t pfnQueryNetworkGetSupportedLayers;
+
+    // version 1.4
+    ze_pfnGraphBuildLogGetString_ext_t          pfnBuildLogGetString;
+
+    // version 1.5
+    ze_pfnGraphCreate_ext_2_t                   pfnCreate2;
+    ze_pfnGraphQueryNetworkCreate_ext_2_t       pfnQueryNetworkCreate2;
+    ze_pfnGraphQueryContextMemory_ext_t         pfnQueryContextMemory;
+
+    // version 1.6
+    ze_pfnDeviceGetGraphProperties_ext_2_t      pfnDeviceGetGraphProperties2;
+
+    // version 1.7
+    ze_pfnGraphGetNativeBinary_ext_2_t          pfnGetNativeBinary2;
+
+    // version 1.8
+    ze_pfnGraphGetProperties_ext_2_t            pfnGetProperties2;
+    ze_pfnGraphInitialize_ext_t                 pfnGraphInitialize;
+
+} ze_graph_dditable_ext_1_8_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Mutable command lists NPU specific flags and structures

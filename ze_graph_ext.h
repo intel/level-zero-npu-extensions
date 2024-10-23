@@ -39,7 +39,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_6 = ZE_MAKE_VERSION( 1, 6 ),         ///< version 1.6
     ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),         ///< version 1.7
     ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_8,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_9,    ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -519,8 +520,8 @@ typedef enum _ze_graph_memory_query_type_t
 /// @brief Graph memory query
 typedef struct _ze_graph_memory_query_t
 {
-    uint64_t total;                                 ///< total memory of specified type
-    uint64_t allocated;                             ///< summed total of all allocations of type
+    uint64_t total;                                 ///< total memory allowed per process for specified type (reported in bytes)
+    uint64_t allocated;                             ///< context's current total memory allocated for specified type (reported in bytes)
 
 } ze_graph_memory_query_t;
 
@@ -609,6 +610,11 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_2_t)(
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
     ze_graph_handle_t hGraph                        ///< [in] handle of the graph
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.9
+
+// Version 1.9 ze_graph_memory_query_t reports values in bytes on Linux and Windows (previously reported in KB on Windows)
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers

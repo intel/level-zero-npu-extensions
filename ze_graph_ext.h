@@ -40,7 +40,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),         ///< version 1.7
     ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
     ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_9,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_10,   ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -257,6 +258,10 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_t)(
     ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
     size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
     uint8_t* pGraphNativeBinary                     ///< [in,out][optional] byte pointer to native binary
+                                                    ///< Usage
+                                                    ///<   1. Call first to query required size of pGraphNativeBinary (pGraphNativeBinary is nullptr)
+                                                    ///<   2. Allocate pGraphNativeBinary of required size
+                                                    ///<   3. Call second time to retrieve pGraphNativeBinary (caller owns the memory)
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -445,6 +450,10 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t
     ze_graph_query_network_handle_t hGraphQueryNetwork, ///< [in] handle of the graph query network
     size_t *pSize,                                      ///< [in,out] size of supported layers string
     char *pSupportedLayers                              ///< [in,out][optional] pointer to null-terminated string of the supported layers
+                                                        ///< Usage
+                                                        ///<   1. Call first to query required size of pSupportedLayers (pSupportedLayers is nullptr)
+                                                        ///<   2. Allocate pSupportedLayers of required size
+                                                        ///<   3. Call second time to retrieve pSupportedLayers (caller owns the memory)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -455,6 +464,10 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_t)(
     ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
     uint32_t* pSize,                                ///< [in,out] pointer to the size of the error message
     char* pBuildLog                                 ///< [in] pointer to buffer to return error message
+                                                    ///< Usage
+                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
+                                                    ///<   2. Allocate pBuildLog of required size
+                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -513,6 +526,8 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkCreate_ext_2_t)(
 typedef enum _ze_graph_memory_query_type_t
 {
     ZE_GRAPH_QUERY_MEMORY_DDR = 0x01,               ///< DDR memory allocations
+    ZE_GRAPH_QUERY_MEMORY_DRIVER_CACHE = 0x02,      ///< Driver total cache size
+    ZE_GRAPH_QUERY_MEMORY_PROGRAM_CACHE = 0x03,     ///< Program total cache size
 
 } ze_graph_memory_query_type_t;
 
@@ -573,7 +588,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_2_t)(
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_2_t)(
     ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
     size_t* pSize,                                  ///< [out] size of native binary in bytes
-    const uint8_t** pGraphNativeBinary              ///< [out] double pointer to view of native binary, driver owns the memory
+    const uint8_t** pGraphNativeBinary              ///< [out] double pointer to view of native binary (driver owns the memory)
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -615,6 +630,29 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
 /// @brief Extension version 1.9
 
 // Version 1.9 ze_graph_memory_query_t reports values in bytes on Linux and Windows (previously reported in KB on Windows)
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.10
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnCompilerGetSupportedOptions_ext_t)(
+    size_t* pSize,                                  ///< [in,out] pointer to the required size of the supported options string
+    char* pSupportedOptions                         ///< [in][optional] pointer to null terminated string to return supported options
+                                                    ///< Usage
+                                                    ///<   1. Call first to query required size of pSupportedOptions (pSupportedOptions is nullptr)
+                                                    ///<   2. Allocate pSupportedOptions of required size
+                                                    ///<   3. Call second time to retrieve pSupportedOptions (caller owns the memory)
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnCompilerIsOptionSupported_ext_t)(
+    const char* pOption,                            ///< [in] pointer to null terminated string of option to query support
+    const char* pValue                              ///< [in][optional] pointer to null terminated string of specific compiler option/value pair
+                                                    ///< Usage:
+                                                    ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
+                                                    ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
+                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
@@ -661,28 +699,14 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnGraphGetProperties_ext_2_t            pfnGetProperties2;
     ze_pfnGraphInitialize_ext_t                 pfnGraphInitialize;
 
+    // version 1.9
+    // no API change
+
+    // version 1.10
+    ze_pfnCompilerGetSupportedOptions_ext_t     pfnCompilerGetSupportedOptions;
+    ze_pfnCompilerIsOptionSupported_ext_t       pfnCompilerIsOptionSupported;
+
 } ze_graph_dditable_ext_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Mutable command lists NPU specific flags and structures
-typedef enum _ze_mutable_command_npu_exp_flag_t
-{
-    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENT = ZE_BIT(6),         ///< graph argument
-    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_PROFILING_QUERY = ZE_BIT(7),  ///< graph profiling query
-
-} ze_mutable_command_npu_exp_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Mutable graph profiling query descriptor
-typedef struct _ze_mutable_graph_profiling_query_exp_desc_t
-{
-    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
-    const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
-                                                        ///< structure (i.e. contains stype and pNext).
-    uint64_t commandId;                                 ///< [in] command identifier
-    ze_graph_profiling_query_handle_t hProfilingQuery;  ///< [in] handle of profiling query
-
-} ze_mutable_graph_profiling_query_exp_desc_t;
 
 #if defined(__cplusplus)
 } // extern "C"

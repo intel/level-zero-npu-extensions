@@ -40,7 +40,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),         ///< version 1.7
     ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
     ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_9,    ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_10,   ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -617,6 +618,20 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
 // Version 1.9 ze_graph_memory_query_t reports values in bytes on Linux and Windows (previously reported in KB on Windows)
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.10
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnCompilerGetSupportedOptions_ext_t)(
+    size_t* pSize,                                  ///< [in,out] pointer to the required size of the supported options string
+    char* pSupportedOptions                         ///< [in] pointer to null terminated string to return supported options
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnCompilerIsOptionSupported_ext_t)(
+    char* pOption                                   ///< [in] pointer to null terminated string of option to query support
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -661,28 +676,14 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnGraphGetProperties_ext_2_t            pfnGetProperties2;
     ze_pfnGraphInitialize_ext_t                 pfnGraphInitialize;
 
+    // version 1.9
+    // no API change
+
+    // version 1.10
+    ze_pfnCompilerGetSupportedOptions_ext_t     pfnCompilerGetSupportedOptions;
+    ze_pfnCompilerIsOptionSupported_ext_t       pfnCompilerIsOptionSupported;
+
 } ze_graph_dditable_ext_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Mutable command lists NPU specific flags and structures
-typedef enum _ze_mutable_command_npu_exp_flag_t
-{
-    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENT = ZE_BIT(6),         ///< graph argument
-    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_PROFILING_QUERY = ZE_BIT(7),  ///< graph profiling query
-
-} ze_mutable_command_npu_exp_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Mutable graph profiling query descriptor
-typedef struct _ze_mutable_graph_profiling_query_exp_desc_t
-{
-    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
-    const void* pNext;                                  ///< [in][optional] must be null or a pointer to an extension-specific
-                                                        ///< structure (i.e. contains stype and pNext).
-    uint64_t commandId;                                 ///< [in] command identifier
-    ze_graph_profiling_query_handle_t hProfilingQuery;  ///< [in] handle of profiling query
-
-} ze_mutable_graph_profiling_query_exp_desc_t;
 
 #if defined(__cplusplus)
 } // extern "C"

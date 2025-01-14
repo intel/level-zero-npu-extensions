@@ -118,7 +118,8 @@ typedef enum _ze_graph_argument_precision_t
     ZE_GRAPH_ARGUMENT_PRECISION_BIN = 0x08,
     ZE_GRAPH_ARGUMENT_PRECISION_DYNAMIC = 0x0D,
     ZE_GRAPH_ARGUMENT_PRECISION_BOOLEAN = 0x0E,
-    
+
+    ZE_GRAPH_ARGUMENT_PRECISION_NF4 = 0x12,
 
 } ze_graph_argument_precision_t;
 
@@ -634,25 +635,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.10
 
-///////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnCompilerGetSupportedOptions_ext_t)(
-    size_t* pSize,                                  ///< [in,out] pointer to the required size of the supported options string
-    char* pSupportedOptions                         ///< [in][optional] pointer to null terminated string to return supported options
-                                                    ///< Usage
-                                                    ///<   1. Call first to query required size of pSupportedOptions (pSupportedOptions is nullptr)
-                                                    ///<   2. Allocate pSupportedOptions of required size
-                                                    ///<   3. Call second time to retrieve pSupportedOptions (caller owns the memory)
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnCompilerIsOptionSupported_ext_t)(
-    const char* pOption,                            ///< [in] pointer to null terminated string of option to query support
-    const char* pValue                              ///< [in][optional] pointer to null terminated string of specific compiler option/value pair
-                                                    ///< Usage:
-                                                    ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
-                                                    ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
-                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-    );
+// Version 1.10 ze_graph_memory_query_t adds query of driver caching sizes and NF4 precision format
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
@@ -700,13 +683,20 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnGraphInitialize_ext_t                 pfnGraphInitialize;
 
     // version 1.9
-    // no API change
+    // no API change, DDR memory query now reported in bytes
 
     // version 1.10
-    ze_pfnCompilerGetSupportedOptions_ext_t     pfnCompilerGetSupportedOptions;
-    ze_pfnCompilerIsOptionSupported_ext_t       pfnCompilerIsOptionSupported;
+    // no API change, added driver cache size queries and NF4 precision
 
 } ze_graph_dditable_ext_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Mutable command lists NPU specific flags and structures
+typedef enum _ze_mutable_command_npu_exp_flag_t
+{
+    ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENT_DEPRECATED = ZE_BIT(6)
+
+} ze_mutable_command_npu_exp_flag_t;
 
 #if defined(__cplusplus)
 } // extern "C"

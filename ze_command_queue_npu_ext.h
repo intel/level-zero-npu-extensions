@@ -28,7 +28,8 @@ extern "C" {
 typedef enum _ze_command_queue_npu_ext_version_t
 {
     ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),                     ///< version 1.0
-    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_CURRENT = ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_0,    ///< latest known version
+    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_1 = ZE_MAKE_VERSION( 1, 1 ),                     ///< version 1.1
+    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_CURRENT = ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_1,    ///< latest known version
     ZE_COMMAND_QUEUE_NPU_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_command_queue_npu_ext_version_t;
@@ -49,6 +50,7 @@ typedef struct _ze_command_queue_desc_npu_ext_t
     const void* pNext;                                      ///< [in][optional] must be null or a pointer to an extension-specific
                                                             ///< structure (i.e. contains stype and pNext).
     bool turbo;                                             ///< [in] command queue context turbo mode
+    bool disableTimeout;                                    ///< [in] disables timeout on the command queue
 
 } ze_command_queue_desc_npu_ext_t;
 
@@ -68,6 +70,9 @@ typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetWorkloadType_ext_t)(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the device
     ze_command_queue_workload_type_t workloadType   ///< [in] workload type
     );
+
+// version 1.1
+// no API change, added disableTimeout to ze_command_queue_desc_npu_ext_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Command Queue NPU functions pointers

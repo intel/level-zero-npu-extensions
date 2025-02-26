@@ -41,7 +41,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
     ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
     ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_10,   ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),       ///< version 1.11
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_11,   ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -638,6 +639,43 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
 // Version 1.10 ze_graph_memory_query_t adds query of driver caching sizes and NF4 precision format
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.11
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported options to query
+typedef enum _ze_npu_options_type_t
+{
+    ZE_NPU_COMPILER_OPTIONS = 0x1,                  ///< Query compiler options
+    ZE_NPU_DRIVER_OPTIONS = 0x2,                    ///< Query driver options
+    ZE_NPU_OPTIONS_FORCE_UINT32 = 0x7fffffff
+
+} ze_npu_options_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGetSupportedOptions_ext_t)(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    ze_npu_options_type_t type,                     ///< [in] Options type to query (compiler, driver)
+    size_t* pSize,                                  ///< [in,out] pointer to the required size of the supported options string
+    char* pSupportedOptions                         ///< [in][optional] pointer to null terminated string to return supported options
+                                                    ///< Usage
+                                                    ///<   1. Call first to query required size of pSupportedOptions (pSupportedOptions is nullptr)
+                                                    ///<   2. Allocate pSupportedOptions of required size
+                                                    ///<   3. Call second time to retrieve pSupportedOptions (caller owns the memory)
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnIsOptionSupported_ext_t)(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    ze_npu_options_type_t type,                     ///< [in] Option type to query (compiler, driver)
+    const char* pOption,                            ///< [in] pointer to null terminated string of option to query support
+    const char* pValue                              ///< [in][optional] pointer to null terminated string of specific compiler option/value pair
+                                                    ///< Usage:
+                                                    ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
+                                                    ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
+                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -687,6 +725,10 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.10
     // no API change, added driver cache size queries and NF4 precision
+
+    // version 1.11
+    ze_pfnGetSupportedOptions_ext_t             pfnCompilerGetSupportedOptions;
+    ze_pfnIsOptionSupported_ext_t               pfnCompilerIsOptionSupported;
 
 } ze_graph_dditable_ext_t;
 

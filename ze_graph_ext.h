@@ -42,7 +42,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
     ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
     ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),       ///< version 1.11
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_11,   ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),       ///< version 1.12
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_12,   ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -676,6 +677,72 @@ typedef ze_result_t (ZE_APICALL *ze_pfnIsOptionSupported_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.12
+///
+/// Adds ::pfnCreate3 that optionally returns ze_graph_build_log_handle_t
+/// Adds ::pfnBuildLogGetString2 and ::pfnBuildLogDestroy to use with ze_graph_build_log_handle_t
+/// Adds ze_graph_properties_3_t with new field ::ze_graph_properties_flag_t that is returned by ::pfnGetProperties3
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's graph log object
+typedef struct _ze_graph_build_log_handle_t *ze_graph_build_log_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_3_t)(
+    ze_context_handle_t hContext,                   ///< [in] handle of the context
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                  ///< [in] pointer to graph descriptor
+    ze_graph_handle_t* phGraph,                     ///< [out] pointer to handle of graph object created
+    ze_graph_build_log_handle_t* phGraphBuildLog    ///< [out][optional] pointer to handle of graph build log
+                                                    /// Graph build log handle is returned to user if pointer is not null.
+                                                    /// The caller is responsible for destroying Graph build log using ::pfnBuildLogDestroy.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported Graph properties flags
+typedef uint32_t ze_graph_properties_flags_t;
+typedef enum _ze_graph_properties_flag_t
+{
+    ZE_GRAPH_PROPERTIES_FLAG_LOADED_FROM_CACHE = ZE_BIT(0),       ///< graph object is loaded from driver cache
+    ZE_GRAPH_PROPERTIES_FLAG_FORCE_UINT32 = 0x7fffffff
+
+} ze_graph_properties_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Graph properties
+typedef struct _ze_graph_properties_3_t
+{
+    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
+    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t numGraphArgs;                          ///< [out] number of graph arguments
+    ze_graph_init_stage_t initStageRequired;        ///< [out] stage required to initialize the graph
+    ze_graph_properties_flags_t flags;              ///< [out] 0 (none) or a valid combination of ::ze_graph_properties_flag_t
+
+} ze_graph_properties_3_t;
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_3_t)(
+    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
+    ze_graph_properties_3_t* pGraphProperties       ///< [in,out] query result for graph properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_2_t)(
+    ze_graph_build_log_handle_t hGraphBuildLog,     ///< [in] handle of the graph build log
+    uint32_t* pSize,                                ///< [in,out] pointer to the size of the error message
+    char* pBuildLog                                 ///< [in] pointer to buffer to return error message
+                                                    ///< Usage
+                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
+                                                    ///<   2. Allocate pBuildLog of required size
+                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogDestroy_ext_t)(
+    ze_graph_build_log_handle_t hGraphBuildLog      ///< [in][release] handle of graph log object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -729,6 +796,12 @@ typedef struct _ze_graph_dditable_ext_t
     // version 1.11
     ze_pfnGetSupportedOptions_ext_t             pfnCompilerGetSupportedOptions;
     ze_pfnIsOptionSupported_ext_t               pfnCompilerIsOptionSupported;
+
+    // version 1.12
+    ze_pfnGraphCreate_ext_3_t                   pfnCreate3;
+    ze_pfnGraphGetProperties_ext_3_t            pfnGetProperties3;
+    ze_pfnGraphBuildLogGetString_ext_2_t        pfnBuildLogGetString2;
+    ze_pfnGraphBuildLogDestroy_ext_t            pfnBuildLogDestroy;
 
 } ze_graph_dditable_ext_t;
 

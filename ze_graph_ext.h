@@ -703,7 +703,9 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_3_t)(
 typedef uint32_t ze_graph_properties_flags_t;
 typedef enum _ze_graph_properties_flag_t
 {
-    ZE_GRAPH_PROPERTIES_FLAG_LOADED_FROM_CACHE = ZE_BIT(0),       ///< graph object is loaded from driver cache
+    ZE_GRAPH_PROPERTIES_FLAG_LOADED_FROM_CACHE = ZE_BIT(0), ///< graph object is loaded from driver cache
+    ZE_GRAPH_PROPERTIES_FLAG_COMPILED = ZE_BIT(1),          ///< graph object is compiled
+    ZE_GRAPH_PROPERTIES_FLAG_PRE_COMPILED = ZE_BIT(2),      ///< graph object is pre-compiled
     ZE_GRAPH_PROPERTIES_FLAG_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_properties_flag_t;

@@ -77,7 +77,9 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                    ///< ::ze_graph_activation_kernel_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                    ///< ::ze_graph_argument_metadata_t
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
-    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_PROFILING_QUERY_EXP_DESC = 0x8      ///< ::ze_mutable_graph_profiling_query_exp_desc_t
+    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_PROFILING_QUERY_EXP_DESC = 0x8,     ///< ::ze_mutable_graph_profiling_query_exp_desc_t
+
+    ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_SYSTEM_MEMORY = 0x24,      ///< ::ze_external_memory_import_system_memory_t
 
 } ze_structure_type_graph_ext_t;
 
@@ -817,6 +819,20 @@ typedef enum _ze_mutable_command_npu_exp_flag_t
     ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENT_DEPRECATED = ZE_BIT(6)
 
 } ze_mutable_command_npu_exp_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief NPU specific structure for allocations backed by system memory
+typedef struct _ze_external_memory_import_system_memory_t
+{
+    ze_structure_type_graph_ext_t stype;                                    ///< [in] type of this structure
+    const void* pNext;                                                      ///< [in][optional] must be null or a pointer to an extension-specific
+                                                                            ///< structure (i.e. contains stype and pNext).
+    void* pSystemMemory;                                                    ///< [in] the system memory pointer to import
+    const uint64_t size;                                                    ///< [in] size of the system memory allocation to be imported
+
+} ze_external_memory_import_system_memory_t;
+
+#define ZE_EXTERNAL_MEMORY_TYPE_FLAG_STANDARD_ALLOCATION 0x100
 
 #if defined(__cplusplus)
 } // extern "C"

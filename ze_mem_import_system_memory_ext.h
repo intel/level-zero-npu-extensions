@@ -24,16 +24,16 @@ extern "C" {
 ///       a system memory pointer.
 typedef struct _ze_external_memory_import_system_memory_t
 {
-    ze_structure_type_graph_ext_t stype;                                    ///< [in] type of this structure
-    const void* pNext;                                                      ///< [in][optional] must be null or a pointer to an extension-specific
-                                                                            ///< structure (i.e. contains stype and pNext).
-    void* pSystemMemory;                                                    ///< [in] system memory pointer to import; must be page-aligned.
-    const uint64_t size;                                                    ///< [in] size of the system memory to import; must be page-aligned
+    ze_structure_type_t stype;                                          ///< [in] type of this structure
+    const void* pNext;                                                  ///< [in][optional] must be null or a pointer to an extension-specific
+                                                                        ///< structure (i.e. contains stype and pNext).
+    void* pSystemMemory;                                                ///< [in] system memory pointer to import; must be page-aligned.
+    const uint64_t size;                                                ///< [in] size of the system memory to import; must be page-aligned
 
 } ze_external_memory_import_system_memory_t;
 
-#define ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_SYSTEM_MEMORY 0x24        ///< ::ze_external_memory_import_system_memory_t
-#define ZE_EXTERNAL_MEMORY_TYPE_FLAG_STANDARD_ALLOCATION 0x100
+#define ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_SYSTEM_MEMORY ((ze_structure_type_t)0x24)
+#define ZE_EXTERNAL_MEMORY_TYPE_FLAG_STANDARD_ALLOCATION       ((ze_external_memory_type_flag_t)0x100)
 
 #if defined(__cplusplus)
 } // extern "C"

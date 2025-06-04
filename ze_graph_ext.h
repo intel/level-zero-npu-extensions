@@ -43,7 +43,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
     ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),       ///< version 1.11
     ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),       ///< version 1.12
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_12,   ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),       ///< version 1.13
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_13,   ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -486,6 +487,8 @@ typedef enum _ze_graph_flags_t
     ZE_GRAPH_FLAG_NONE = 0x0,
     ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,           ///< Disable driver managed caching
     ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,          ///< Enable layer and task level timings
+    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,    ///< Input graph buffer pointer is persistent for lifetime of graph handle.
+                                                   ///< Invalidating before destroying graph handle results in undefined behavior.
 
 } ze_graph_flags_t;
 
@@ -495,9 +498,9 @@ typedef struct _ze_graph_desc_2_t
 {
     ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
     void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_format_t format;                       ///< [in] Graph format passed in with input
-    size_t inputSize;                               ///< [in] Size of input buffer in bytes
-    const uint8_t* pInput;                          ///< [in] Pointer to input buffer
+    ze_graph_format_t format;                       ///< [in] Format of input graph buffer
+    size_t inputSize;                               ///< [in] Size of input graph buffer in bytes
+    const uint8_t* pInput;                          ///< [in] Pointer to input graph buffer
     const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Options:
                                                     ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
                                                     ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'

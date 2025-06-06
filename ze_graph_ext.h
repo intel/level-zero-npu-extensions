@@ -488,6 +488,7 @@ typedef enum _ze_graph_flags_t
     ZE_GRAPH_FLAG_NONE = 0x0,
     ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,           ///< Disable driver managed caching
     ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,          ///< Enable layer and task level timings
+    ZE_GRAPH_FLAG_INPUT_PERSISTENT = 0x4,          ///< Input buffer is pointer persistent for lifetime of graph
 
 } ze_graph_flags_t;
 

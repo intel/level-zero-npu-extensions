@@ -32,7 +32,7 @@ typedef struct _ze_external_memory_import_system_memory_t
 
 } ze_external_memory_import_system_memory_t;
 
-#define ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_SYSTEM_MEMORY ((ze_structure_type_t)0x24)
+#define ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_SYSTEM_MEMORY ((ze_structure_type_t)0x00020037)
 #define ZE_EXTERNAL_MEMORY_TYPE_FLAG_STANDARD_ALLOCATION       ((ze_external_memory_type_flag_t)0x100)
 
 #if defined(__cplusplus)

@@ -45,7 +45,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),           ///< version 1.12
     ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),           ///< version 1.13
     ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14),            ///< version 1.14
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_14,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15),            ///< version 1.15
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_15,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -81,6 +82,9 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
     ZE_STRUCTURE_TYPE_GRAPH_INPUT_HASH = 0x8,                       ///< ::ze_graph_input_hash_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_property_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_FORCE_UINT32 = 0x7fffffff
 
 } ze_structure_type_graph_ext_t;
@@ -300,7 +304,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphSetArgumentValue_ext_t)(
     const void* pArgValue                                           ///< [in] Pointer to graph argument
                                                                     ///< Usage
                                                                     ///<   1. pointer to tensor (backwards compatabile)
-                                                                    ///<   2. pointer to struct containing argument property (v1.14)
+                                                                    ///<   2. pointer to struct containing argument property (v1.15)
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,7 +785,41 @@ typedef struct _ze_graph_input_hash_t
 
 } ze_graph_input_hash_t;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.15
+///
+/// Adds: ze_graph_argument_property_strides_t returned through pNext of ze_graph_properties_t
+/// Adds: ze_graph_argument_value_tensor_t struct for setting tensor gpuva through pfnSetArgumentValue2
+/// Adds: ze_graph_argument_property_strides_t struct for setting tensor strides through pfnSetArgumentValue2
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_property_strides_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    bool supportsDynamicStrides;                                    ///< [out] indicates that tensor supports dynamic strides
+
+} ze_graph_argument_property_strides_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_value_tensor_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    const void* pTensor;                                            ///< [in] gpuva of IO tensor
+
+} ze_graph_argument_value_tensor_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_value_strides_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t userStrides[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];    ///< [in] arguments strides
+
+} ze_graph_argument_value_strides_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -847,6 +885,9 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.14
     // no API change, added ze_graph_input_hash_t and ZE_GRAPH_PROPERTIES_FLAG_NO_STANDARD_ALLOCATION
+
+    // version 1.15
+    ze_pfnGraphSetArgumentValue_ext_t                               pfnSetArgumentValue2;
 
 } ze_graph_dditable_ext_t;
 

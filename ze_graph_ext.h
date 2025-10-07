@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Supported Graph Extension versions
 ///
 /// @details
@@ -30,35 +30,37 @@ extern "C" {
 ///       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
 typedef enum _ze_graph_ext_version_t
 {
-    ZE_GRAPH_EXT_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),         ///< version 1.0
-    ZE_GRAPH_EXT_VERSION_1_1 = ZE_MAKE_VERSION( 1, 1 ),         ///< version 1.1
-    ZE_GRAPH_EXT_VERSION_1_2 = ZE_MAKE_VERSION( 1, 2 ),         ///< version 1.2
-    ZE_GRAPH_EXT_VERSION_1_3 = ZE_MAKE_VERSION( 1, 3 ),         ///< version 1.3
-    ZE_GRAPH_EXT_VERSION_1_4 = ZE_MAKE_VERSION( 1, 4 ),         ///< version 1.4
-    ZE_GRAPH_EXT_VERSION_1_5 = ZE_MAKE_VERSION( 1, 5 ),         ///< version 1.5
-    ZE_GRAPH_EXT_VERSION_1_6 = ZE_MAKE_VERSION( 1, 6 ),         ///< version 1.6
-    ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),         ///< version 1.7
-    ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),         ///< version 1.8
-    ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),         ///< version 1.9
-    ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),       ///< version 1.10
-    ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),       ///< version 1.11
-    ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),       ///< version 1.12
-    ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),       ///< version 1.13
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_13,   ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),             ///< version 1.0
+    ZE_GRAPH_EXT_VERSION_1_1 = ZE_MAKE_VERSION( 1, 1 ),             ///< version 1.1
+    ZE_GRAPH_EXT_VERSION_1_2 = ZE_MAKE_VERSION( 1, 2 ),             ///< version 1.2
+    ZE_GRAPH_EXT_VERSION_1_3 = ZE_MAKE_VERSION( 1, 3 ),             ///< version 1.3
+    ZE_GRAPH_EXT_VERSION_1_4 = ZE_MAKE_VERSION( 1, 4 ),             ///< version 1.4
+    ZE_GRAPH_EXT_VERSION_1_5 = ZE_MAKE_VERSION( 1, 5 ),             ///< version 1.5
+    ZE_GRAPH_EXT_VERSION_1_6 = ZE_MAKE_VERSION( 1, 6 ),             ///< version 1.6
+    ZE_GRAPH_EXT_VERSION_1_7 = ZE_MAKE_VERSION( 1, 7 ),             ///< version 1.7
+    ZE_GRAPH_EXT_VERSION_1_8 = ZE_MAKE_VERSION( 1, 8 ),             ///< version 1.8
+    ZE_GRAPH_EXT_VERSION_1_9 = ZE_MAKE_VERSION( 1, 9 ),             ///< version 1.9
+    ZE_GRAPH_EXT_VERSION_1_10 = ZE_MAKE_VERSION( 1, 10 ),           ///< version 1.10
+    ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),           ///< version 1.11
+    ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),           ///< version 1.12
+    ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),           ///< version 1.13
+    ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14),            ///< version 1.14
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_14,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Supported graph creation input formats
 typedef enum _ze_graph_format_t
 {
-    ZE_GRAPH_FORMAT_NATIVE = 0x1,                   ///< Format is pre-compiled blob (elf, flatbuffers)
-    ZE_GRAPH_FORMAT_NGRAPH_LITE = 0x2,              ///< Format is ngraph lite IR
+    ZE_GRAPH_FORMAT_NATIVE = 0x1,                                   ///< Format is pre-compiled blob (elf, flatbuffers)
+    ZE_GRAPH_FORMAT_NGRAPH_LITE = 0x2,                              ///< Format is ngraph lite IR
+    ZE_GRAPH_FORMAT_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_format_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Compiler version information
 typedef struct _ze_graph_compiler_version_info_t
 {
@@ -67,35 +69,36 @@ typedef struct _ze_graph_compiler_version_info_t
 
 } ze_graph_compiler_version_info_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Defines structure types
 typedef enum _ze_structure_type_graph_ext_t
 {
-    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,                    ///< ::ze_device_graph_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_DESC_PROPERTIES = 0x2,                      ///< ::ze_graph_desc_t
-    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES = 0x3,                           ///< ::ze_graph_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,                  ///< ::ze_graph_argument_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                    ///< ::ze_graph_activation_kernel_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                    ///< ::ze_graph_argument_metadata_t
+    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,                ///< ::ze_device_graph_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_DESC_PROPERTIES = 0x2,                  ///< ::ze_graph_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES = 0x3,                       ///< ::ze_graph_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,              ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                ///< ::ze_graph_activation_kernel_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
-    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_PROFILING_QUERY_EXP_DESC = 0x8      ///< ::ze_mutable_graph_profiling_query_exp_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_INPUT_HASH = 0x8,                       ///< ::ze_graph_input_hash_t
+    ZE_STRUCTURE_TYPE_GRAPH_FORCE_UINT32 = 0x7fffffff
 
 } ze_structure_type_graph_ext_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Device graph properties
 typedef struct _ze_device_graph_properties_t
 {
-    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
-    void* pNext;                                        ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_ext_version_t graphExtensionVersion;       ///< [out] graph extension version
-    ze_graph_compiler_version_info_t compilerVersion;   ///< [out] compiler version
-    ze_graph_format_t graphFormatsSupported;            ///< [out] graph formats supported
-    uint32_t maxOVOpsetVersionSupported;                ///< [out] max OV opset version supported by the compiler
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_ext_version_t graphExtensionVersion;                   ///< [out] graph extension version
+    ze_graph_compiler_version_info_t compilerVersion;               ///< [out] compiler version
+    ze_graph_format_t graphFormatsSupported;                        ///< [out] graph formats supported
+    uint32_t maxOVOpsetVersionSupported;                            ///< [out] max OV opset version supported by the compiler
 
 } ze_device_graph_properties_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
 typedef enum _ze_graph_argument_precision_t
 {
@@ -129,9 +132,11 @@ typedef enum _ze_graph_argument_precision_t
 
     ZE_GRAPH_ARGUMENT_PRECISION_NF4 = 0x12,
 
+    ZE_GRAPH_ARGUMENT_PRECISION_FORCE_UINT32 = 0x7fffffff
+
 } ze_graph_argument_precision_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
 typedef enum _ze_graph_argument_layout_t
 {
@@ -151,183 +156,188 @@ typedef enum _ze_graph_argument_layout_t
     ZE_GRAPH_ARGUMENT_LAYOUT_HW         = 0xC0,
     ZE_GRAPH_ARGUMENT_LAYOUT_NC,
     ZE_GRAPH_ARGUMENT_LAYOUT_CN,
+    ZE_GRAPH_ARGUMENT_LAYOUT_BLOCKED    = 0xC8,
 
-    ZE_GRAPH_ARGUMENT_LAYOUT_BLOCKED    = 0xC8
+    ZE_GRAPH_ARGUMENT_LAYOUT_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_argument_layout_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Activation Shave Desc (passed through ze_graph_desc pNext)
 typedef struct _ze_activation_kernel_desc_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    size_t kernelDataSize;                          ///< [in] Size of kernel data buffer in bytes
-    const uint8_t* pKernelData;                     ///< [in] Pointer to kernel data buffer
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    size_t kernelDataSize;                                          ///< [in] Size of kernel data buffer in bytes
+    const uint8_t* pKernelData;                                     ///< [in] Pointer to kernel data buffer
 
 } ze_activation_kernel_desc_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph descriptor
 typedef struct _ze_graph_desc_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_format_t format;                       ///< [in] Graph format passed in with input
-    size_t inputSize;                               ///< [in] Size of input buffer in bytes
-    const uint8_t* pInput;                          ///< [in] Pointer to input buffer
-    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Options:
-                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
-                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
-                                                    ///<   - Set input and output arguments precision. Supported precisions:
-                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
-                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
-                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
-                                                    ///<   - Set input and output arguments layout. Supported layouts:
-                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
-                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
-                                                    ///<   - compile options string passed directly to compiler
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_format_t format;                                       ///< [in] Graph format passed in with input
+    size_t inputSize;                                               ///< [in] Size of input buffer in bytes
+    const uint8_t* pInput;                                          ///< [in] Pointer to input buffer
+    const char* pBuildFlags;                                        ///< [in][optional] Null terminated string containing build flags. Options:
+                                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                                    ///<   - Set input and output arguments precision. Supported precisions:
+                                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
+                                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                                    ///<   - Set input and output arguments layout. Supported layouts:
+                                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
+                                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
+                                                                    ///<   - compile options string passed directly to compiler
 } ze_graph_desc_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Example ze_graph_desc pBuildFlags
 ///
 /// --inputs_precisions="in1:U8" --inputs_layouts="in1:NCHW" --outputs_precisions="out1:FP16 out2:FP16" --outputs_layouts="out1:NCHW out2:NCHW" --config PERFORMANCE_HINT="THROUGHPUT"
 ///
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph properties
 typedef struct _ze_graph_properties_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    uint32_t numGraphArgs;                          ///< [out] number of graph arguments
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t numGraphArgs;                                          ///< [out] number of graph arguments
 
 } ze_graph_properties_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
 typedef enum _ze_graph_argument_type_t
 {
     ZE_GRAPH_ARGUMENT_TYPE_INPUT,
-    ZE_GRAPH_ARGUMENT_TYPE_OUTPUT
+    ZE_GRAPH_ARGUMENT_TYPE_OUTPUT,
+    ZE_GRAPH_ARGUMENT_TYPE_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_argument_type_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_ARGUMENT_NAME
 /// @brief Maximum device name string size
 #define ZE_MAX_GRAPH_ARGUMENT_NAME  256
 #endif // ZE_MAX_GRAPH_ARGUMENT_NAME
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE
 /// @brief Maximum device name string size
 #define ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE 5
 #endif // ZE_MAX_GRAPH_ARGUMENT_SIZE
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
 typedef struct _ze_graph_argument_properties_t
 {
-    ze_structure_type_graph_ext_t stype;                    ///< [in] type of this structure
-    void* pNext;                                            ///< [in,out][optional] must be null or a pointer to an extension-specific
-    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                  ///< [out] name from input IR
-    ze_graph_argument_type_t type;                          ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];   ///< [out] tensor dimensions upto 5D
-    ze_graph_argument_precision_t networkPrecision;         ///< [out] precision from input IR
-    ze_graph_argument_layout_t networkLayout;               ///< [out] layout from input IR
-    ze_graph_argument_precision_t devicePrecision;          ///< [out] precision from compiled executable
-    ze_graph_argument_layout_t deviceLayout;                ///< [out] layout from compiled executable
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
+    ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
+    ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
+    ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
+    ze_graph_argument_layout_t deviceLayout;                        ///< [out] layout from compiled executable
 
 } ze_graph_argument_properties_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_t)(
-    ze_device_handle_t hDevice,                           ///< [in] handle of the device
-    ze_device_graph_properties_t *pDeviceGraphProperties  ///< [out] query result for graph properties of the device
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    ze_device_graph_properties_t *pDeviceGraphProperties            ///< [out] query result for graph properties of the device
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_t)(
-    ze_context_handle_t hContext,                   ///< [in] handle of the context
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
-    const ze_graph_desc_t* desc,                    ///< [in] pointer to graph descriptor
-    ze_graph_handle_t* phGraph                      ///< [out] pointer to handle of graph object created
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    const ze_graph_desc_t* desc,                                    ///< [in] pointer to graph descriptor
+    ze_graph_handle_t* phGraph                                      ///< [out] pointer to handle of graph object created
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphDestroy_ext_t)(
-    ze_graph_handle_t hGraph                        ///< [in][release] handle of graph object to destroy
+    ze_graph_handle_t hGraph                                        ///< [in][release] handle of graph object to destroy
     );
 
 //////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
-    uint8_t* pGraphNativeBinary                     ///< [in,out][optional] byte pointer to native binary
-                                                    ///< Usage
-                                                    ///<   1. Call first to query required size of pGraphNativeBinary (pGraphNativeBinary is nullptr)
-                                                    ///<   2. Allocate pGraphNativeBinary of required size
-                                                    ///<   3. Call second time to retrieve pGraphNativeBinary (caller owns the memory)
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    size_t* pSize,                                                  ///< [in,out] size of native binary in bytes.
+    uint8_t* pGraphNativeBinary                                     ///< [in,out][optional] byte pointer to native binary
+                                                                    ///< Usage
+                                                                    ///<   1. Call first to query required size of pGraphNativeBinary (pGraphNativeBinary is nullptr)
+                                                                    ///<   2. Allocate pGraphNativeBinary of required size
+                                                                    ///<   3. Call second time to retrieve pGraphNativeBinary (caller owns the memory)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    ze_graph_properties_t* pGraphProperties         ///< [in,out] query result for graph properties.
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    ze_graph_properties_t* pGraphProperties                         ///< [in,out] query result for graph properties.
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to get properties
     ze_graph_argument_properties_t* pGraphArgumentProperties        ///< [in,out] query result for graph argument properties.
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphSetArgumentValue_ext_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    uint32_t argIndex,                              ///< [in] index of the argument
-    const void* pArgValue                           ///< [in] value to bind to the index
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    uint32_t argIndex,                                              ///< [in] index of the argument
+    const void* pArgValue                                           ///< [in] Pointer to graph argument
+                                                                    ///< Usage
+                                                                    ///<   1. pointer to tensor (backwards compatabile)
+                                                                    ///<   2. pointer to struct containing argument property (v1.14)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnAppendGraphInitialize_ext_t)(
-    ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph
-    ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    ze_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    ze_command_list_handle_t hCommandList,                          ///< [in] handle of the command list
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph
+    ze_event_handle_t hSignalEvent,                                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                                         ///< [in][optional] number of events to wait on before launching
+    ze_event_handle_t* phWaitEvents                                 ///< [in][optional] handle of the events to wait on before launching
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnAppendGraphExecute_ext_t)(
-    ze_command_list_handle_t hCommandList,              ///< [in] handle of the command list
-    ze_graph_handle_t hGraph,                           ///< [in] handle of the graph
-    ze_graph_profiling_query_handle_t hProfilingQuery,  ///< [in][optional] handle of profiling query
-    ze_event_handle_t hSignalEvent,                     ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                             ///< [in][optional] number of events to wait on before launching
-    ze_event_handle_t* phWaitEvents                     ///< [in][optional] handle of the events to wait on before launching
+    ze_command_list_handle_t hCommandList,                          ///< [in] handle of the command list
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph
+    ze_graph_profiling_query_handle_t hProfilingQuery,              ///< [in][optional] handle of profiling query
+    ze_event_handle_t hSignalEvent,                                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                                         ///< [in][optional] number of events to wait on before launching
+    ze_event_handle_t* phWaitEvents                                 ///< [in][optional] handle of the events to wait on before launching
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.1
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_TENSOR_REF_DIMS
 /// @brief Maximum tensor reference dimensions size
 #define ZE_MAX_GRAPH_TENSOR_REF_DIMS 8
 #endif // ZE_MAX_GRAPH_TENSOR_REF_DIMS
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_TENSOR_NAMES_SIZE
 /// @brief Maximum tensor names size
 #define ZE_MAX_GRAPH_TENSOR_NAMES_SIZE 32
 #endif // ZE_MAX_GRAPH_TENSOR_NAMES_SIZE
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
 typedef enum _ze_graph_metadata_type
 {
@@ -348,220 +358,223 @@ typedef enum _ze_graph_metadata_type
     ZE_GRAPH_METADATA_TYPE_U8 = 14,
     ZE_GRAPH_METADATA_TYPE_U16 = 15,
     ZE_GRAPH_METADATA_TYPE_U32 = 16,
-    ZE_GRAPH_METADATA_TYPE_U64 = 17
+    ZE_GRAPH_METADATA_TYPE_U64 = 17,
+    ZE_GRAPH_METADATA_TYPE_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_metadata_type;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument metadata
 typedef struct _ze_graph_argument_metadata_t
 {
-    ze_structure_type_graph_ext_t stype;                                           ///< [in] type of this structure
-    void* pNext;                                                                   ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_argument_type_t type;                                                 ///< [out] type of argument
-    char friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                                ///< [out] friendly name
-    ze_graph_metadata_type data_type;                                              ///< [out] data type of argument
-    uint64_t shape[ZE_MAX_GRAPH_TENSOR_REF_DIMS];                                  ///< [out] tensor shape
-    uint32_t shape_size;                                                           ///< [out] size of shape array
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_argument_type_t type;                                  ///< [out] type of argument
+    char friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                 ///< [out] friendly name
+    ze_graph_metadata_type data_type;                               ///< [out] data type of argument
+    uint64_t shape[ZE_MAX_GRAPH_TENSOR_REF_DIMS];                   ///< [out] tensor shape
+    uint32_t shape_size;                                            ///< [out] size of shape array
     char tensor_names[ZE_MAX_GRAPH_TENSOR_NAMES_SIZE][ZE_MAX_GRAPH_ARGUMENT_NAME]; ///< [out] tensor name array
-    uint32_t tensor_names_count;                                                   ///< [out] size of tensor name array
-    char input_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                                   ///< [out] input name
+    uint32_t tensor_names_count;                                    ///< [out] size of tensor name array
+    char input_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                    ///< [out] input name
 
 } ze_graph_argument_metadata_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct _ze_graph_argument_properties_2_t
 {
-    ze_structure_type_graph_ext_t stype;                    ///< [in] type of this structure
-    void* pNext;                                            ///< [in,out][optional] must be null or a pointer to an extension-specific
-    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                  ///< [out] name from input IR
-    ze_graph_argument_type_t type;                          ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];   ///< [out] tensor dimensions upto 5D
-    ze_graph_argument_precision_t networkPrecision;         ///< [out] precision from input IR
-    ze_graph_argument_layout_t networkLayout;               ///< [out] layout from input IR
-    ze_graph_argument_precision_t devicePrecision;          ///< [out] precision from compiled executable
-    ze_graph_argument_layout_t deviceLayout;                ///< [out] layout from compiled executable
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
+    ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
+    ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
+    ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
+    ze_graph_argument_layout_t deviceLayout;                        ///< [out] layout from compiled executable
 
     // version 2
-    float quantReverseScale;                                ///< [out] Quantized tensor reverse scale value for input argument
-    uint8_t quantZeroPoint;                                 ///< [out] Quantized tesnor zero point value for input argument
+    float quantReverseScale;                                        ///< [out] Quantized tensor reverse scale value for input argument
+    uint8_t quantZeroPoint;                                         ///< [out] Quantized tesnor zero point value for input argument
 
 } ze_graph_argument_properties_2_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_2_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to get properties
     ze_graph_argument_properties_2_t* pGraphArgumentProperties      ///< [in,out] query result for graph argument properties.
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentMetadata_ext_t)(
-    ze_graph_handle_t hGraph,                            ///< [in] handle of the graph object
-    uint32_t argIndex,                                   ///< [in] index of the argument to get metadata
-    ze_graph_argument_metadata_t* pGraphArgumentMetadata ///< [in,out] query result for graph argument metadata
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    uint32_t argIndex,                                              ///< [in] index of the argument to get metadata
+    ze_graph_argument_metadata_t* pGraphArgumentMetadata            ///< [in,out] query result for graph argument metadata
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.2
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct _ze_graph_argument_properties_3_t
 {
-    ze_structure_type_graph_ext_t stype;                    ///< [in] type of this structure
-    void* pNext;                                            ///< [in,out][optional] must be null or a pointer to an extension-specific
-    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                  ///< [out] name from input IR
-    ze_graph_argument_type_t type;                          ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];   ///< [out] tensor dimensions upto 5D
-    ze_graph_argument_precision_t networkPrecision;         ///< [out] precision from input IR
-    ze_graph_argument_layout_t networkLayout;               ///< [out] layout from input IR
-    ze_graph_argument_precision_t devicePrecision;          ///< [out] precision from compiled executable
-    ze_graph_argument_layout_t deviceLayout;                ///< [out] layout from compiled executable
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
+    ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
+    ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
+    ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
+    ze_graph_argument_layout_t deviceLayout;                        ///< [out] layout from compiled executable
 
     // version 2
-    float quantReverseScale;                                ///< [out] Quantized tensor reverse scale value for input argument
-    uint8_t quantZeroPoint;                                 ///< [out] Quantized tesnor zero point value for input argument
+    float quantReverseScale;                                        ///< [out] Quantized tensor reverse scale value for input argument
+    uint8_t quantZeroPoint;                                         ///< [out] Quantized tesnor zero point value for input argument
 
     // version 3
-    uint32_t dims_count;                                    ///< [out] size of shape array
-    char debug_friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];   ///< [out] debug friendly name
+    uint32_t dims_count;                                            ///< [out] size of shape array
+    char debug_friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];           ///< [out] debug friendly name
     char associated_tensor_names[ZE_MAX_GRAPH_TENSOR_NAMES_SIZE][ZE_MAX_GRAPH_ARGUMENT_NAME]; ///< [out] tensor name array
-    uint32_t associated_tensor_names_count;                 ///< [out] size of tensor name array
+    uint32_t associated_tensor_names_count;                         ///< [out] size of tensor name array
 
 } ze_graph_argument_properties_3_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_3_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to get properties
     ze_graph_argument_properties_3_t* pGraphArgumentProperties      ///< [in,out] query result for graph argument properties.
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.3
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's graph query network object
 typedef struct _ze_graph_query_network_handle_t *ze_graph_query_network_handle_t;
 
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkCreate_ext_t)(
-    ze_context_handle_t hContext,                         ///< [in] handle of the context object
-    ze_device_handle_t hDevice,                           ///< [in] handle of the device
-    const ze_graph_desc_t* desc,                          ///< [in] pointer to graph descriptor
-    ze_graph_query_network_handle_t* phGraphQueryNetwork  ///< [out] pointer to handle of graph query network object created
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context object
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    const ze_graph_desc_t* desc,                                    ///< [in] pointer to graph descriptor
+    ze_graph_query_network_handle_t* phGraphQueryNetwork            ///< [out] pointer to handle of graph query network object created
 );
 
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkDestroy_ext_t)(
-    ze_graph_query_network_handle_t hGraphQueryNetwork  ///< [in][release] handle of the graph query network
+    ze_graph_query_network_handle_t hGraphQueryNetwork              ///< [in][release] handle of the graph query network
 );
 
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t)(
-    ze_graph_query_network_handle_t hGraphQueryNetwork, ///< [in] handle of the graph query network
-    size_t *pSize,                                      ///< [in,out] size of supported layers string
-    char *pSupportedLayers                              ///< [in,out][optional] pointer to null-terminated string of the supported layers
-                                                        ///< Usage
-                                                        ///<   1. Call first to query required size of pSupportedLayers (pSupportedLayers is nullptr)
-                                                        ///<   2. Allocate pSupportedLayers of required size
-                                                        ///<   3. Call second time to retrieve pSupportedLayers (caller owns the memory)
+    ze_graph_query_network_handle_t hGraphQueryNetwork,             ///< [in] handle of the graph query network
+    size_t *pSize,                                                  ///< [in,out] size of supported layers string
+    char *pSupportedLayers                                          ///< [in,out][optional] pointer to null-terminated string of the supported layers
+                                                                    ///< Usage
+                                                                    ///<   1. Call first to query required size of pSupportedLayers (pSupportedLayers is nullptr)
+                                                                    ///<   2. Allocate pSupportedLayers of required size
+                                                                    ///<   3. Call second time to retrieve pSupportedLayers (caller owns the memory)
 );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.4
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    uint32_t* pSize,                                ///< [in,out] pointer to the size of the error message
-    char* pBuildLog                                 ///< [in] pointer to buffer to return error message
-                                                    ///< Usage
-                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
-                                                    ///<   2. Allocate pBuildLog of required size
-                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    uint32_t* pSize,                                                ///< [in,out] pointer to the size of the error message
+    char* pBuildLog                                                 ///< [in] pointer to buffer to return error message
+                                                                    ///< Usage
+                                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
+                                                                    ///<   2. Allocate pBuildLog of required size
+                                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.5
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Bitfield of graph flags
 typedef enum _ze_graph_flags_t
 {
     ZE_GRAPH_FLAG_NONE = 0x0,
-    ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,           ///< Disable driver managed caching
-    ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,          ///< Enable layer and task level timings
-    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,    ///< Input graph buffer pointer is persistent for lifetime of graph handle.
-                                                   ///< Invalidating before destroying graph handle results in undefined behavior.
+    ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,                            ///< Disable driver managed caching
+    ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,                           ///< Enable layer and task level timings
+    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,                     ///< Input graph buffer pointer is persistent for lifetime of graph handle.
+                                                                    ///< Invalidating before destroying graph handle results in undefined behavior.
+    ZE_GRAPH_FLAG_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_flags_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph descriptor
 typedef struct _ze_graph_desc_2_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_format_t format;                       ///< [in] Format of input graph buffer
-    size_t inputSize;                               ///< [in] Size of input graph buffer in bytes
-    const uint8_t* pInput;                          ///< [in] Pointer to input graph buffer
-    const char* pBuildFlags;                        ///< [in][optional] Null terminated string containing build flags. Options:
-                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
-                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
-                                                    ///<   - Set input and output arguments precision. Supported precisions:
-                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
-                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
-                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
-                                                    ///<   - Set input and output arguments layout. Supported layouts:
-                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
-                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
-                                                    ///<   - compile options string passed directly to compiler
-    uint32_t flags;                                 ///< [in][optional] Graph creation flags
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_format_t format;                                       ///< [in] Format of input graph buffer
+    size_t inputSize;                                               ///< [in] Size of input graph buffer in bytes
+    const uint8_t* pInput;                                          ///< [in] Pointer to input graph buffer
+    const char* pBuildFlags;                                        ///< [in][optional] Null terminated string containing build flags. Options:
+                                                                    ///< - '--inputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                                    ///<   '--outputs_precisions="<arg>:<precision> <arg2>:<precision> ..."'
+                                                                    ///<   - Set input and output arguments precision. Supported precisions:
+                                                                    ///<     FP64, FP32, FP16, BF16, U64, U32, U16, U8, U4, I64, I32, I16, I8, I4, BIN
+                                                                    ///< - '--inputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                                    ///<   '--outputs_layouts="<arg>:<layout> <arg2>:<layout> ..."'
+                                                                    ///<   - Set input and output arguments layout. Supported layouts:
+                                                                    ///<     NCHW, NHWC, NCDHW, NDHWC, OIHW, C, CHW, HW, NC, CN
+                                                                    ///< - '--config PARAM="VALUE" PARAM2="VALUE" ...'
+                                                                    ///<   - compile options string passed directly to compiler
+    uint32_t flags;                                                 ///< [in][optional] Graph creation flags
 } ze_graph_desc_2_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_2_t)(
-    ze_context_handle_t hContext,                   ///< [in] handle of the context
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
-    const ze_graph_desc_2_t* desc,                  ///< [in] pointer to graph descriptor
-    ze_graph_handle_t* phGraph                      ///< [out] pointer to handle of graph object created
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                                  ///< [in] pointer to graph descriptor
+    ze_graph_handle_t* phGraph                                      ///< [out] pointer to handle of graph object created
     );
 
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkCreate_ext_2_t)(
-    ze_context_handle_t hContext,                         ///< [in] handle of the context object
-    ze_device_handle_t hDevice,                           ///< [in] handle of the device
-    const ze_graph_desc_2_t* desc,                        ///< [in] pointer to graph descriptor
-    ze_graph_query_network_handle_t* phGraphQueryNetwork  ///< [out] pointer to handle of graph query network object created
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context object
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                                  ///< [in] pointer to graph descriptor
+    ze_graph_query_network_handle_t* phGraphQueryNetwork            ///< [out] pointer to handle of graph query network object created
 );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph memory query types
 typedef enum _ze_graph_memory_query_type_t
 {
-    ZE_GRAPH_QUERY_MEMORY_DDR = 0x01,               ///< DDR memory allocations
-    ZE_GRAPH_QUERY_MEMORY_DRIVER_CACHE = 0x02,      ///< Driver total cache size
-    ZE_GRAPH_QUERY_MEMORY_PROGRAM_CACHE = 0x03,     ///< Program total cache size
+    ZE_GRAPH_QUERY_MEMORY_DDR = 0x01,                               ///< DDR memory allocations
+    ZE_GRAPH_QUERY_MEMORY_DRIVER_CACHE = 0x02,                      ///< Driver total cache size
+    ZE_GRAPH_QUERY_MEMORY_PROGRAM_CACHE = 0x03,                     ///< Program total cache size
+    ZE_GRAPH_QUERY_MEMORY_FORCE_UINT32 = 0x7fffffff             
 
 } ze_graph_memory_query_type_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph memory query
 typedef struct _ze_graph_memory_query_t
 {
-    uint64_t total;                                 ///< total memory allowed per process for specified type (reported in bytes)
-    uint64_t allocated;                             ///< context's current total memory allocated for specified type (reported in bytes)
+    uint64_t total;                                                 ///< total memory allowed per process for specified type (reported in bytes)
+    uint64_t allocated;                                             ///< context's current total memory allocated for specified type (reported in bytes)
 
 } ze_graph_memory_query_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryContextMemory_ext_t)(
-    ze_context_handle_t hContext,                   ///< [in] handle of the context object
-    ze_graph_memory_query_type_t type,              ///< [in] type of memory query
-    ze_graph_memory_query_t* query                  ///< [out] result of query
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context object
+    ze_graph_memory_query_type_t type,                              ///< [in] type of memory query
+    ze_graph_memory_query_t* query                                  ///< [out] result of query
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.6
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph version information
 typedef struct _ze_graph_version_info_t
 {
@@ -571,231 +584,247 @@ typedef struct _ze_graph_version_info_t
 
 } ze_graph_version_info_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Device graph properties
 typedef struct _ze_device_graph_properties_2_t
 {
-    ze_structure_type_graph_ext_t stype;                ///< [in] type of this structure
-    void* pNext;                                        ///< [in,out][optional] must be null or a pointer to an extension-specific
-    ze_graph_ext_version_t graphExtensionVersion;       ///< [out] graph extension version
-    ze_graph_compiler_version_info_t compilerVersion;   ///< [out] compiler version
-    ze_graph_format_t graphFormatsSupported;            ///< [out] graph formats supported
-    uint32_t maxOVOpsetVersionSupported;                ///< [out] max OV opset version supported by the compiler
-    ze_graph_version_info_t elfVersion;                 ///< [out] elf container version
-    ze_graph_version_info_t runtimeVersion;             ///< [out] firmware runtime version
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    ze_graph_ext_version_t graphExtensionVersion;                   ///< [out] graph extension version
+    ze_graph_compiler_version_info_t compilerVersion;               ///< [out] compiler version
+    ze_graph_format_t graphFormatsSupported;                        ///< [out] graph formats supported
+    uint32_t maxOVOpsetVersionSupported;                            ///< [out] max OV opset version supported by the compiler
+    ze_graph_version_info_t elfVersion;                             ///< [out] elf container version
+    ze_graph_version_info_t runtimeVersion;                         ///< [out] firmware runtime version
 
 } ze_device_graph_properties_2_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_2_t)(
-    ze_device_handle_t hDevice,                             ///< [in] handle of the device
-    ze_device_graph_properties_2_t *pDeviceGraphProperties  ///< [out] query result for graph properties of the device
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    ze_device_graph_properties_2_t *pDeviceGraphProperties          ///< [out] query result for graph properties of the device
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.7
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetNativeBinary_ext_2_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    size_t* pSize,                                  ///< [out] size of native binary in bytes
-    const uint8_t** pGraphNativeBinary              ///< [out] double pointer to view of native binary (driver owns the memory)
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    size_t* pSize,                                                  ///< [out] size of native binary in bytes
+    const uint8_t** pGraphNativeBinary                              ///< [out] double pointer to view of native binary (driver owns the memory)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.8
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Stage required to initialize the graph
 typedef enum _ze_graph_init_stage_t
 {
-    ZE_GRAPH_STAGE_COMMAND_LIST_INITIALIZE = 0x1,   ///< Call to pfnAppendGraphInitialize is required
-    ZE_GRAPH_STAGE_INITIALIZE = 0x2,                ///< Call to pfnGraphInitialize is required
+    ZE_GRAPH_STAGE_COMMAND_LIST_INITIALIZE = 0x1,                   ///< Call to pfnAppendGraphInitialize is required
+    ZE_GRAPH_STAGE_INITIALIZE = 0x2,                                ///< Call to pfnGraphInitialize is required
     ZE_GRAPH_STAGE_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_init_stage_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph properties
 typedef struct _ze_graph_properties_2_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    uint32_t numGraphArgs;                          ///< [out] number of graph arguments
-    ze_graph_init_stage_t initStageRequired;        ///< [out] stage required to initialize the graph
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t numGraphArgs;                                          ///< [out] number of graph arguments
+    ze_graph_init_stage_t initStageRequired;                        ///< [out] stage required to initialize the graph
 
 } ze_graph_properties_2_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_2_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    ze_graph_properties_2_t* pGraphProperties       ///< [in,out] query result for graph properties
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    ze_graph_properties_2_t* pGraphProperties                       ///< [in,out] query result for graph properties
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphInitialize_ext_t)(
-    ze_graph_handle_t hGraph                        ///< [in] handle of the graph
+    ze_graph_handle_t hGraph                                        ///< [in] handle of the graph
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.9
 
 // Version 1.9 ze_graph_memory_query_t reports values in bytes on Linux and Windows (previously reported in KB on Windows)
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.10
 
 // Version 1.10 ze_graph_memory_query_t adds query of driver caching sizes and NF4 precision format
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.11
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Supported options to query
 typedef enum _ze_npu_options_type_t
 {
-    ZE_NPU_COMPILER_OPTIONS = 0x1,                  ///< Query compiler options
-    ZE_NPU_DRIVER_OPTIONS = 0x2,                    ///< Query driver options
+    ZE_NPU_COMPILER_OPTIONS = 0x1,                                  ///< Query compiler options
+    ZE_NPU_DRIVER_OPTIONS = 0x2,                                    ///< Query driver options
     ZE_NPU_OPTIONS_FORCE_UINT32 = 0x7fffffff
 
 } ze_npu_options_type_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGetSupportedOptions_ext_t)(
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
-    ze_npu_options_type_t type,                     ///< [in] Options type to query (compiler, driver)
-    size_t* pSize,                                  ///< [in,out] pointer to the required size of the supported options string
-    char* pSupportedOptions                         ///< [in][optional] pointer to null terminated string to return supported options
-                                                    ///< Usage
-                                                    ///<   1. Call first to query required size of pSupportedOptions (pSupportedOptions is nullptr)
-                                                    ///<   2. Allocate pSupportedOptions of required size
-                                                    ///<   3. Call second time to retrieve pSupportedOptions (caller owns the memory)
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    ze_npu_options_type_t type,                                     ///< [in] Options type to query (compiler, driver)
+    size_t* pSize,                                                  ///< [in,out] pointer to the required size of the supported options string
+    char* pSupportedOptions                                         ///< [in][optional] pointer to null terminated string to return supported options
+                                                                    ///< Usage
+                                                                    ///<   1. Call first to query required size of pSupportedOptions (pSupportedOptions is nullptr)
+                                                                    ///<   2. Allocate pSupportedOptions of required size
+                                                                    ///<   3. Call second time to retrieve pSupportedOptions (caller owns the memory)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnIsOptionSupported_ext_t)(
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
-    ze_npu_options_type_t type,                     ///< [in] Option type to query (compiler, driver)
-    const char* pOption,                            ///< [in] pointer to null terminated string of option to query support
-    const char* pValue                              ///< [in][optional] pointer to null terminated string of specific compiler option/value pair
-                                                    ///< Usage:
-                                                    ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
-                                                    ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
-                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    ze_npu_options_type_t type,                                     ///< [in] Option type to query (compiler, driver)
+    const char* pOption,                                            ///< [in] pointer to null terminated string of option to query support
+    const char* pValue                                              ///< [in][optional] pointer to null terminated string of specific compiler option/value pair
+                                                                    ///< Usage:
+                                                                    ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
+                                                                    ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
+                                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.12
 ///
 /// Adds ::pfnCreate3 that optionally returns ze_graph_build_log_handle_t
 /// Adds ::pfnBuildLogGetString2 and ::pfnBuildLogDestroy to use with ze_graph_build_log_handle_t
 /// Adds ze_graph_properties_3_t with new field ::ze_graph_properties_flag_t that is returned by ::pfnGetProperties3
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's graph log object
 typedef struct _ze_graph_build_log_handle_t *ze_graph_build_log_handle_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_3_t)(
-    ze_context_handle_t hContext,                   ///< [in] handle of the context
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
-    const ze_graph_desc_2_t* desc,                  ///< [in] pointer to graph descriptor
-    ze_graph_handle_t* phGraph,                     ///< [out] pointer to handle of graph object created
-    ze_graph_build_log_handle_t* phGraphBuildLog    ///< [out][optional] pointer to handle of graph build log
-                                                    /// Graph build log handle is returned to user if pointer is not null.
-                                                    /// The caller is responsible for destroying Graph build log using ::pfnBuildLogDestroy.
+    ze_context_handle_t hContext,                                   ///< [in] handle of the context
+    ze_device_handle_t hDevice,                                     ///< [in] handle of the device
+    const ze_graph_desc_2_t* desc,                                  ///< [in] pointer to graph descriptor
+    ze_graph_handle_t* phGraph,                                     ///< [out] pointer to handle of graph object created
+    ze_graph_build_log_handle_t* phGraphBuildLog                    ///< [out][optional] pointer to handle of graph build log
+                                                                    /// Graph build log handle is returned to user if pointer is not null.
+                                                                    /// The caller is responsible for destroying Graph build log using ::pfnBuildLogDestroy.
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Supported Graph properties flags
 typedef uint32_t ze_graph_properties_flags_t;
 typedef enum _ze_graph_properties_flag_t
 {
-    ZE_GRAPH_PROPERTIES_FLAG_LOADED_FROM_CACHE = ZE_BIT(0), ///< graph object is loaded from driver cache
-    ZE_GRAPH_PROPERTIES_FLAG_COMPILED = ZE_BIT(1),          ///< graph object is compiled
-    ZE_GRAPH_PROPERTIES_FLAG_PRE_COMPILED = ZE_BIT(2),      ///< graph object is pre-compiled
+    ZE_GRAPH_PROPERTIES_FLAG_LOADED_FROM_CACHE = ZE_BIT(0),         ///< graph object is loaded from driver cache
+    ZE_GRAPH_PROPERTIES_FLAG_COMPILED = ZE_BIT(1),                  ///< graph object is compiled
+    ZE_GRAPH_PROPERTIES_FLAG_PRE_COMPILED = ZE_BIT(2),              ///< graph object is pre-compiled
+    ZE_GRAPH_PROPERTIES_FLAG_NO_STANDARD_ALLOCATION = ZE_BIT(3),    ///< graph object not backed by standard allocation (caller can free input blob)
     ZE_GRAPH_PROPERTIES_FLAG_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_properties_flag_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph properties
 typedef struct _ze_graph_properties_3_t
 {
-    ze_structure_type_graph_ext_t stype;            ///< [in] type of this structure
-    void* pNext;                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    uint32_t numGraphArgs;                          ///< [out] number of graph arguments
-    ze_graph_init_stage_t initStageRequired;        ///< [out] stage required to initialize the graph
-    ze_graph_properties_flags_t flags;              ///< [out] 0 (none) or a valid combination of ::ze_graph_properties_flag_t
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t numGraphArgs;                                          ///< [out] number of graph arguments
+    ze_graph_init_stage_t initStageRequired;                        ///< [out] stage required to initialize the graph
+    ze_graph_properties_flags_t flags;                              ///< [out] 0 (none) or a valid combination of ::ze_graph_properties_flag_t
 
 } ze_graph_properties_3_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_3_t)(
-    ze_graph_handle_t hGraph,                       ///< [in] handle of the graph object
-    ze_graph_properties_3_t* pGraphProperties       ///< [in,out] query result for graph properties
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    ze_graph_properties_3_t* pGraphProperties                       ///< [in,out] query result for graph properties
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_2_t)(
-    ze_graph_build_log_handle_t hGraphBuildLog,     ///< [in] handle of the graph build log
-    uint32_t* pSize,                                ///< [in,out] pointer to the size of the error message
-    char* pBuildLog                                 ///< [in] pointer to buffer to return error message
-                                                    ///< Usage
-                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
-                                                    ///<   2. Allocate pBuildLog of required size
-                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
+    ze_graph_build_log_handle_t hGraphBuildLog,                     ///< [in] handle of the graph build log
+    uint32_t* pSize,                                                ///< [in,out] pointer to the size of the error message
+    char* pBuildLog                                                 ///< [in] pointer to buffer to return error message
+                                                                    ///< Usage
+                                                                    ///<   1. Call first to query required size of pBuildLog (pBuildLog is nullptr)
+                                                                    ///<   2. Allocate pBuildLog of required size
+                                                                    ///<   3. Call second time to retrieve pBuildLog (caller owns the memory)
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogDestroy_ext_t)(
-    ze_graph_build_log_handle_t hGraphBuildLog      ///< [in][release] handle of graph log object to destroy
+    ze_graph_build_log_handle_t hGraphBuildLog                      ///< [in][release] handle of graph log object to destroy
     );
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.14
+///
+/// Adds ::ze_graph_input_hash_t optionally passed in through ze_graph_desc_t::pNext
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Graph input hash
+typedef struct _ze_graph_input_hash_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint64_t hash;                                                  ///< [in] hash value
+
+} ze_graph_input_hash_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
     // version 1.0
-    ze_pfnGraphCreate_ext_t                     pfnCreate;
-    ze_pfnGraphDestroy_ext_t                    pfnDestroy;
-    ze_pfnGraphGetProperties_ext_t              pfnGetProperties;
-    ze_pfnGraphGetArgumentProperties_ext_t      pfnGetArgumentProperties;
-    ze_pfnGraphSetArgumentValue_ext_t           pfnSetArgumentValue;
-    ze_pfnAppendGraphInitialize_ext_t           pfnAppendGraphInitialize;
-    ze_pfnAppendGraphExecute_ext_t              pfnAppendGraphExecute;
-    ze_pfnGraphGetNativeBinary_ext_t            pfnGetNativeBinary;
-    ze_pfnDeviceGetGraphProperties_ext_t        pfnDeviceGetGraphProperties;
+    ze_pfnGraphCreate_ext_t                                         pfnCreate;
+    ze_pfnGraphDestroy_ext_t                                        pfnDestroy;
+    ze_pfnGraphGetProperties_ext_t                                  pfnGetProperties;
+    ze_pfnGraphGetArgumentProperties_ext_t                          pfnGetArgumentProperties;
+    ze_pfnGraphSetArgumentValue_ext_t                               pfnSetArgumentValue;
+    ze_pfnAppendGraphInitialize_ext_t                               pfnAppendGraphInitialize;
+    ze_pfnAppendGraphExecute_ext_t                                  pfnAppendGraphExecute;
+    ze_pfnGraphGetNativeBinary_ext_t                                pfnGetNativeBinary;
+    ze_pfnDeviceGetGraphProperties_ext_t                            pfnDeviceGetGraphProperties;
 
     // version 1.1
-    ze_pfnGraphGetArgumentMetadata_ext_t        pfnGraphGetArgumentMetadata;
-    ze_pfnGraphGetArgumentProperties_ext_2_t    pfnGetArgumentProperties2;
+    ze_pfnGraphGetArgumentMetadata_ext_t                            pfnGraphGetArgumentMetadata;
+    ze_pfnGraphGetArgumentProperties_ext_2_t                        pfnGetArgumentProperties2;
 
     // version 1.2
-    ze_pfnGraphGetArgumentProperties_ext_3_t    pfnGetArgumentProperties3;
+    ze_pfnGraphGetArgumentProperties_ext_3_t                        pfnGetArgumentProperties3;
 
     // version 1.3
-    ze_pfnGraphQueryNetworkCreate_ext_t             pfnQueryNetworkCreate;
-    ze_pfnGraphQueryNetworkDestroy_ext_t            pfnQueryNetworkDestroy;
-    ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t pfnQueryNetworkGetSupportedLayers;
+    ze_pfnGraphQueryNetworkCreate_ext_t                             pfnQueryNetworkCreate;
+    ze_pfnGraphQueryNetworkDestroy_ext_t                            pfnQueryNetworkDestroy;
+    ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t                 pfnQueryNetworkGetSupportedLayers;
 
     // version 1.4
-    ze_pfnGraphBuildLogGetString_ext_t          pfnBuildLogGetString;
+    ze_pfnGraphBuildLogGetString_ext_t                              pfnBuildLogGetString;
 
     // version 1.5
-    ze_pfnGraphCreate_ext_2_t                   pfnCreate2;
-    ze_pfnGraphQueryNetworkCreate_ext_2_t       pfnQueryNetworkCreate2;
-    ze_pfnGraphQueryContextMemory_ext_t         pfnQueryContextMemory;
+    ze_pfnGraphCreate_ext_2_t                                       pfnCreate2;
+    ze_pfnGraphQueryNetworkCreate_ext_2_t                           pfnQueryNetworkCreate2;
+    ze_pfnGraphQueryContextMemory_ext_t                             pfnQueryContextMemory;
 
     // version 1.6
-    ze_pfnDeviceGetGraphProperties_ext_2_t      pfnDeviceGetGraphProperties2;
+    ze_pfnDeviceGetGraphProperties_ext_2_t                          pfnDeviceGetGraphProperties2;
 
     // version 1.7
-    ze_pfnGraphGetNativeBinary_ext_2_t          pfnGetNativeBinary2;
+    ze_pfnGraphGetNativeBinary_ext_2_t                              pfnGetNativeBinary2;
 
     // version 1.8
-    ze_pfnGraphGetProperties_ext_2_t            pfnGetProperties2;
-    ze_pfnGraphInitialize_ext_t                 pfnGraphInitialize;
+    ze_pfnGraphGetProperties_ext_2_t                                pfnGetProperties2;
+    ze_pfnGraphInitialize_ext_t                                     pfnGraphInitialize;
 
     // version 1.9
     // no API change, DDR memory query now reported in bytes
@@ -804,18 +833,24 @@ typedef struct _ze_graph_dditable_ext_t
     // no API change, added driver cache size queries and NF4 precision
 
     // version 1.11
-    ze_pfnGetSupportedOptions_ext_t             pfnCompilerGetSupportedOptions;
-    ze_pfnIsOptionSupported_ext_t               pfnCompilerIsOptionSupported;
+    ze_pfnGetSupportedOptions_ext_t                                 pfnCompilerGetSupportedOptions;
+    ze_pfnIsOptionSupported_ext_t                                   pfnCompilerIsOptionSupported;
 
     // version 1.12
-    ze_pfnGraphCreate_ext_3_t                   pfnCreate3;
-    ze_pfnGraphGetProperties_ext_3_t            pfnGetProperties3;
-    ze_pfnGraphBuildLogGetString_ext_2_t        pfnBuildLogGetString2;
-    ze_pfnGraphBuildLogDestroy_ext_t            pfnBuildLogDestroy;
+    ze_pfnGraphCreate_ext_3_t                                       pfnCreate3;
+    ze_pfnGraphGetProperties_ext_3_t                                pfnGetProperties3;
+    ze_pfnGraphBuildLogGetString_ext_2_t                            pfnBuildLogGetString2;
+    ze_pfnGraphBuildLogDestroy_ext_t                                pfnBuildLogDestroy;
+
+    // version 1.13
+    // no API change, added ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT flag
+
+    // version 1.14
+    // no API change, added ze_graph_input_hash_t and ZE_GRAPH_PROPERTIES_FLAG_NO_STANDARD_ALLOCATION
 
 } ze_graph_dditable_ext_t;
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Mutable command lists NPU specific flags and structures
 typedef enum _ze_mutable_command_npu_exp_flag_t
 {

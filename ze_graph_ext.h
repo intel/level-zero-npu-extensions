@@ -504,8 +504,11 @@ typedef enum _ze_graph_flags_t
     ZE_GRAPH_FLAG_NONE = 0x0,
     ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,                            ///< Disable driver managed caching
     ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,                           ///< Enable layer and task level timings
-    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,                     ///< Input graph buffer pointer is persistent for lifetime of graph handle.
-                                                                    ///< Invalidating before destroying graph handle results in undefined behavior.
+    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,                     ///< Input graph buffer pointer is persistent and driver can avoid additional copy
+                                                                    ///<   1. Invalidating before destroying graph handle results in undefined behavior
+                                                                    ///<   2. inputSize and pInput address must be page-aligned
+                                                                    ///<   3. non-aligned values will result in ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+
     ZE_GRAPH_FLAG_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_flags_t;
@@ -698,7 +701,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnIsOptionSupported_ext_t)(
                                                                     ///< Usage:
                                                                     ///<   1. Passing pValue as nullptr will check if the option is generally supported by the compiler
                                                                     ///<   2. Passing pValue as null terminated string will check if the specific value is supported by the compiler option
-                                                                    ///<   2. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+                                                                    ///<   3. returns ZE_RESULT_SUCCESS or ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

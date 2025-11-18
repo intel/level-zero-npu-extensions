@@ -47,10 +47,10 @@ typedef enum _ze_structure_type_context_npu_ext_t
 typedef uint32_t ze_npu_context_options_t;
 typedef enum _ze_npu_context_option_t
 {
-    ZE_NPU_CONTEXT_OPTION_ENABLE_IDLE_OPTIMIZATIONS = ZE_BIT(0),            ///< Enable memory optimizations when device goes idle
-                                                                            ///<   1. idle memory optimizations are opt-in
+    ZE_NPU_CONTEXT_OPTION_IDLE_OPTIMIZATIONS = ZE_BIT(0),                   ///< Memory optimizations when device goes idle
+                                                                            ///<   1. idle memory optimizations are opt-out
                                                                             ///<   2. driver will deallocate and/or evict memory
-                                                                            ///<   3. latency sensitive workloads should consider keeping disabled
+                                                                            ///<   3. latency sensitive workloads should consider disabling
     ZE_NPU_CONTEXT_OPTION_FORCE_UINT32 = 0x7fffffff
 
 } ze_npu_context_option_t;

@@ -46,7 +46,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),           ///< version 1.13
     ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14),            ///< version 1.14
     ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15),            ///< version 1.15
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_15,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_16,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -502,9 +503,9 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_t)(
 typedef enum _ze_graph_flags_t
 {
     ZE_GRAPH_FLAG_NONE = 0x0,
-    ZE_GRAPH_FLAG_DISABLE_CACHING = 0x1,                            ///< Disable driver managed caching
-    ZE_GRAPH_FLAG_ENABLE_PROFILING = 0x2,                           ///< Enable layer and task level timings
-    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = 0x4,                     ///< Input graph buffer pointer is persistent and driver can avoid additional copy
+    ZE_GRAPH_FLAG_DISABLE_CACHING = ZE_BIT(0),                      ///< Disable driver managed caching
+    ZE_GRAPH_FLAG_ENABLE_PROFILING = ZE_BIT(1),                     ///< Enable layer and task level timings
+    ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT = ZE_BIT(2),               ///< Input graph buffer pointer is persistent and driver can avoid additional copy
                                                                     ///<   1. Invalidating before destroying graph handle results in undefined behavior
                                                                     ///<   2. inputSize and pInput address must be page-aligned
                                                                     ///<   3. non-aligned values will result in ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
@@ -735,6 +736,7 @@ typedef enum _ze_graph_properties_flag_t
     ZE_GRAPH_PROPERTIES_FLAG_COMPILED = ZE_BIT(1),                  ///< graph object is compiled
     ZE_GRAPH_PROPERTIES_FLAG_PRE_COMPILED = ZE_BIT(2),              ///< graph object is pre-compiled
     ZE_GRAPH_PROPERTIES_FLAG_NO_STANDARD_ALLOCATION = ZE_BIT(3),    ///< graph object not backed by standard allocation (caller can free input blob)
+    ZE_GRAPH_PROPERTIES_FLAG_PROFILING_ENABLED = ZE_BIT(4),         ///< graph object was compiled with profiling enabled, profiling buffer handle required for inference execution
     ZE_GRAPH_PROPERTIES_FLAG_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_properties_flag_t;
@@ -823,6 +825,19 @@ typedef struct _ze_graph_argument_value_strides_t
 } ze_graph_argument_value_strides_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.16
+///
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphEvict_ext_t)(
+    ze_graph_handle_t hGraph                                        ///< [in] handle of graph object's memory to evict
+                                                                    ///< Usage
+                                                                    ///<   1. Will attempt to evict memory of all inferences recorded across command lists
+                                                                    ///<   2. Inferences currently executing on device will not evict memory
+                                                                    ///<   3. For optimal results, host synchronize before calling
+    );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -891,6 +906,9 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.15
     ze_pfnGraphSetArgumentValue_ext_t                               pfnSetArgumentValue2;
+
+    // version 1.16
+    ze_pfnGraphEvict_ext_t                                          pfnEvict;
 
 } ze_graph_dditable_ext_t;
 

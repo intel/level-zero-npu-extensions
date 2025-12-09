@@ -68,7 +68,7 @@ typedef enum _ze_npu_driver_option_t
 } ze_npu_driver_option_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief NPU driver properties passed in through ze_pfnDriverSetProperties_ext_t
+/// @brief NPU driver properties passed in through pNext of ze_init_driver_type_desc_t
 typedef struct _ze_driver_properties_npu_ext_t
 {
     ze_structure_type_driver_npu_ext_t stype;                               ///< [in] type of this structure
@@ -84,18 +84,11 @@ typedef ze_result_t (ZE_APICALL *ze_pfnDriverGetExtension_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnDriverSetProperties_ext_t)(
-    ze_driver_handle_t hDriver,                                             ///< [in] handle of the driver
-    ze_driver_properties_npu_ext_t* pDriverProperties                       ///< [in] driver properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of DRIVER NPU functions pointers
 typedef struct _ze_driver_npu_dditable_ext_t
 {
     // version 1.0
     ze_pfnDriverGetExtension_ext_t              pfnGetExtension;
-    ze_pfnDriverSetProperties_ext_t             pfnSetProperties;
 
 } ze_driver_npu_dditable_ext_t;
 

@@ -1,6 +1,6 @@
 /*
 *
-* Copyright (C) 2021-2023 Intel Corporation
+* Copyright (C) 2021-2025 Intel Corporation
 *
 * SPDX-License-Identifier: MIT
 *
@@ -47,10 +47,48 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14),            ///< version 1.14
     ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15),            ///< version 1.15
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_16,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_17,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieving Graph Extension API Function Table
+///
+/// @details
+///     **Method 1:** Direct function pointer retrieval
+///     @code
+///     ze_graph_dditable_ext_t* graphDdiTable = nullptr;
+///     ze_result_t result = zeDriverGetExtensionFunctionAddress(
+///         hDriver,
+///         ZE_GRAPH_EXT_NAME,
+///         (void**)&graphDdiTable
+///     );
+///     if (result != ZE_RESULT_SUCCESS || graphDdiTable == nullptr) {
+///         // Extension not supported
+///         return result;
+///     }
+///     // Use graphDdiTable->pfnCreate, graphDdiTable->pfnDestroy, etc.
+///     @endcode
+///
+///     **Method 2:** Version-aware table initialization available from v1.17
+///     @code
+///     // Step 1: Get the table initialization function
+///     ze_pfnGetGraphDdiTable_ext_t pfnGetGraphDdiTable = nullptr;
+///     ze_result_t result = zeDriverGetExtensionFunctionAddress(
+///         hDriver,
+///         "zeGetGraphDdiTable",
+///         (void**)&pfnGetGraphDdiTable
+///     );
+///     if (result != ZE_RESULT_SUCCESS || pfnGetGraphDdiTable == nullptr) {
+///         // Fall back to Method 1 for older drivers
+///     }
+///
+///     // Step 2: Initialize DDI table for specific version
+///     ze_graph_dditable_ext_t graphDdiTable = {};
+///     result = pfnGetGraphDdiTable(ZE_GRAPH_EXT_VERSION_1_17, &graphDdiTable);
+///     @endcode
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Supported graph creation input formats
@@ -83,12 +121,22 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
     ZE_STRUCTURE_TYPE_GRAPH_INPUT_HASH = 0x8,                       ///< ::ze_graph_input_hash_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_property_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_property_strides_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_2 = 0xC,            ///< ::ze_graph_argument_properties_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_3 = 0xD,            ///< ::ze_graph_argument_properties_3_t
+    ZE_STRUCTURE_TYPE_GRAPH_DESC_2 = 0xE,                           ///< ::ze_graph_desc_2_t
+    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES_2 = 0xF,              ///< ::ze_device_graph_properties_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES_2 = 0x10,                    ///< ::ze_graph_properties_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES_3 = 0x11,                    ///< ::ze_graph_properties_3_t
     ZE_STRUCTURE_TYPE_GRAPH_FORCE_UINT32 = 0x7fffffff
 
 } ze_structure_type_graph_ext_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's graph object
+typedef struct _ze_graph_handle_t *ze_graph_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Device graph properties
@@ -911,6 +959,18 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnGraphEvict_ext_t                                          pfnEvict;
 
 } ze_graph_dditable_ext_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Function pointer type for retrieving Graph DDI table
+///
+/// @details
+///     This function initializes the Graph extension DDI table for a specific version.
+///     It allows applications to request a specific API version and receive a compatible
+///     function table, enabling forward and backward compatibility.
+typedef ze_result_t (ZE_APICALL *ze_pfnGetGraphDdiTable_ext_t)(
+    ze_graph_ext_version_t version,                                 ///< [in] requested API version
+    ze_graph_dditable_ext_t* pDdiTable                              ///< [in,out] pointer to table of DDI function pointers
+);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Mutable command lists NPU specific flags and structures

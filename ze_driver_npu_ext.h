@@ -38,7 +38,6 @@ typedef enum _ze_driver_npu_ext_version_t
 typedef enum _ze_structure_type_driver_npu_ext_t
 {
     ZE_STRUCTURE_TYPE_DRIVER_EXTENSION_NPU_EXT = 0x1,                       ///< ::ze_driver_extension_npu_ext_t
-    ZE_STRUCTURE_TYPE_DRIVER_PROPERTIES_NPU_EXT = 0x2,                      ///< ::ze_driver_properties_npu_ext_t
     ZE_STRUCTURE_TYPE_DRIVER_FORCE_UINT32 = 0x7fffffff
 
 } ze_structure_type_driver_npu_ext_t;
@@ -54,28 +53,6 @@ typedef struct _ze_driver_extension_npu_ext_t
     void** ppFunctionAddress;                                               ///< [out] pointer to function pointer
 
 } ze_driver_extension_npu_ext_t;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief Supported options
-typedef uint32_t ze_npu_driver_options_t;
-typedef enum _ze_npu_driver_option_t
-{
-    ZE_NPU_DRIVER_OPTION_INTEGRITY_CHECKS = ZE_BIT(0),                      ///< Driver performs integrity checks on structures
-                                                                            ///<   1. integrity checks are opt-in
-                                                                            ///<   2. driver will validate structure contents
-    ZE_NPU_DRIVER_OPTION_FORCE_UINT32 = 0x7fffffff
-
-} ze_npu_driver_option_t;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief NPU driver properties passed in through pNext of ze_init_driver_type_desc_t
-typedef struct _ze_driver_properties_npu_ext_t
-{
-    ze_structure_type_driver_npu_ext_t stype;                               ///< [in] type of this structure
-    const void* pNext;                                                      ///< [in][optional] must be null or a pointer to an extension-specific structure
-    ze_npu_driver_options_t options;                                        ///< [in] valid combination of ze_npu_driver_options_t
-
-} ze_driver_properties_npu_ext_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef ze_result_t (ZE_APICALL *ze_pfnDriverGetExtension_ext_t)(

@@ -1,6 +1,6 @@
 /*
 *
-* Copyright (C) 2021-2023 Intel Corporation
+* Copyright (C) 2021-2025 Intel Corporation
 *
 * SPDX-License-Identifier: MIT
 *
@@ -76,16 +76,28 @@ typedef struct _ze_graph_compiler_version_info_t
 typedef enum _ze_structure_type_graph_ext_t
 {
     ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,                ///< ::ze_device_graph_properties_t
-    ZE_STRUCTURE_TYPE_GRAPH_DESC_PROPERTIES = 0x2,                  ///< ::ze_graph_desc_t
+    ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES_2 = 0xF,              ///< ::ze_device_graph_properties_2_t
+    
+    ZE_STRUCTURE_TYPE_GRAPH_DESC = 0x2,                             ///< ::ze_graph_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_DESC_2 = 0xE,                           ///< ::ze_graph_desc_2_t
+
     ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES = 0x3,                       ///< ::ze_graph_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES_2 = 0x10,                    ///< ::ze_graph_properties_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_PROPERTIES_3 = 0x11,                    ///< ::ze_graph_properties_3_t
+
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,              ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_2 = 0xC,            ///< ::ze_graph_argument_properties_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_3 = 0xD,            ///< ::ze_graph_argument_properties_3_t
+
     ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                ///< ::ze_graph_activation_kernel_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
-    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
     ZE_STRUCTURE_TYPE_GRAPH_INPUT_HASH = 0x8,                       ///< ::ze_graph_input_hash_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_properties_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_property_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_property_strides_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
+
+    ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
+
     ZE_STRUCTURE_TYPE_GRAPH_FORCE_UINT32 = 0x7fffffff
 
 } ze_structure_type_graph_ext_t;

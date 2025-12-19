@@ -77,7 +77,7 @@ typedef enum _ze_structure_type_graph_ext_t
 {
     ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES = 0x1,                ///< ::ze_device_graph_properties_t
     ZE_STRUCTURE_TYPE_DEVICE_GRAPH_PROPERTIES_2 = 0xF,              ///< ::ze_device_graph_properties_2_t
-    
+
     ZE_STRUCTURE_TYPE_GRAPH_DESC = 0x2,                             ///< ::ze_graph_desc_t
     ZE_STRUCTURE_TYPE_GRAPH_DESC_2 = 0xE,                           ///< ::ze_graph_desc_2_t
 
@@ -571,7 +571,7 @@ typedef enum _ze_graph_memory_query_type_t
     ZE_GRAPH_QUERY_MEMORY_DDR = 0x01,                               ///< DDR memory allocations
     ZE_GRAPH_QUERY_MEMORY_DRIVER_CACHE = 0x02,                      ///< Driver total cache size
     ZE_GRAPH_QUERY_MEMORY_PROGRAM_CACHE = 0x03,                     ///< Program total cache size
-    ZE_GRAPH_QUERY_MEMORY_FORCE_UINT32 = 0x7fffffff             
+    ZE_GRAPH_QUERY_MEMORY_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_memory_query_type_t;
 

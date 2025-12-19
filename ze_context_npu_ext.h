@@ -56,7 +56,7 @@ typedef enum _ze_npu_context_option_t
 } ze_npu_context_option_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief NPU context properties passed in through ze_context_desc_t::pNext or ze_pfnContextSetProperties_ext_t
+/// @brief NPU context properties passed in through ze_pfnContextSetProperties_ext_t
 typedef struct _ze_context_properties_npu_ext_t
 {
     ze_structure_type_context_npu_ext_t stype;                              ///< [in] type of this structure

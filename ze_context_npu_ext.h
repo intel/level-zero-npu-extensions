@@ -15,6 +15,8 @@
 #define ZE_CONTEXT_NPU_EXT_NAME "ZE_extension_context_npu"
 #endif
 
+#define ZE_EXTERNAL_MEMORY_TYPE_FLAG_STANDARD_ALLOCATION       ((ze_external_memory_type_flag_t)0x100)
+
 #if defined(__cplusplus)
 extern "C" {
 #endif

@@ -48,7 +48,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15),            ///< version 1.15
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_17,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_18,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -523,6 +524,7 @@ typedef enum _ze_graph_flags_t
                                                                     ///<   2. inputSize and pInput address must be page-aligned
                                                                     ///<   3. non-aligned values will result in ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     ZE_GRAPH_FLAG_SECURE_COMPILE = ZE_BIT(3),                       ///< Compile graph in secure mode where the driver applies additional protections to the compilation process                                                                     
+    ZE_GRAPH_FLAG_OPTIMIZE_FOR_DYNAMIC_SHAPES = ZE_BIT(4),          ///< Driver will cache strides and re-apply when arguments are mutated, no need to set strides when they haven't changed
 
     ZE_GRAPH_FLAG_FORCE_UINT32 = 0x7fffffff
 

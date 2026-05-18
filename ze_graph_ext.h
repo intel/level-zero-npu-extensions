@@ -49,7 +49,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
     ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_18,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19 — tensor rank cap raised from 5 to 8 (ABI break)
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_19,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -249,9 +250,16 @@ typedef enum _ze_graph_argument_type_t
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE
-/// @brief Maximum device name string size
-#define ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE 5
-#endif // ZE_MAX_GRAPH_ARGUMENT_SIZE
+/// @brief Maximum supported tensor dimension size for graph argument properties (dims, shape, strides)
+///
+/// @details
+///     This is a hard limit on the tensor dimensions in various structures. The value was increased from 5 to 8
+///     in version 1.19 of the graph extension, which is an ABI break. The original structures with size 5 arrays
+///     are still supported for backwards compatibility. The driver will return an ZE_RESULT_ERROR_INVALID_SIZE if
+///     the app tries to query properties for a tensor with rank greater than ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE.
+///
+#define ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE 8
+#endif // ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
@@ -261,7 +269,7 @@ typedef struct _ze_graph_argument_properties_t
     void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
     char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
     ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions
     ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
     ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
     ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
@@ -345,12 +353,6 @@ typedef ze_result_t (ZE_APICALL *ze_pfnAppendGraphExecute_ext_t)(
 /// @brief Extension version 1.1
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef ZE_MAX_GRAPH_TENSOR_REF_DIMS
-/// @brief Maximum tensor reference dimensions size
-#define ZE_MAX_GRAPH_TENSOR_REF_DIMS 8
-#endif // ZE_MAX_GRAPH_TENSOR_REF_DIMS
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_TENSOR_NAMES_SIZE
 /// @brief Maximum tensor names size
 #define ZE_MAX_GRAPH_TENSOR_NAMES_SIZE 32
@@ -391,7 +393,7 @@ typedef struct _ze_graph_argument_metadata_t
     ze_graph_argument_type_t type;                                  ///< [out] type of argument
     char friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                 ///< [out] friendly name
     ze_graph_metadata_type data_type;                               ///< [out] data type of argument
-    uint64_t shape[ZE_MAX_GRAPH_TENSOR_REF_DIMS];                   ///< [out] tensor shape
+    uint64_t shape[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];          ///< [out] tensor shape
     uint32_t shape_size;                                            ///< [out] size of shape array
     char tensor_names[ZE_MAX_GRAPH_TENSOR_NAMES_SIZE][ZE_MAX_GRAPH_ARGUMENT_NAME]; ///< [out] tensor name array
     uint32_t tensor_names_count;                                    ///< [out] size of tensor name array
@@ -406,7 +408,7 @@ typedef struct _ze_graph_argument_properties_2_t
     void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
     char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
     ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions
     ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
     ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
     ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
@@ -442,7 +444,7 @@ typedef struct _ze_graph_argument_properties_3_t
     void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
     char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
     ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
-    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions upto 5D
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];           ///< [out] tensor dimensions
     ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
     ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
     ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable

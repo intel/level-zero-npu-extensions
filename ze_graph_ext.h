@@ -49,7 +49,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
     ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_18,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_19,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -90,6 +91,7 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES = 0x4,              ///< ::ze_graph_argument_properties_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_2 = 0xC,            ///< ::ze_graph_argument_properties_2_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_3 = 0xD,            ///< ::ze_graph_argument_properties_3_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTIES_4 = 0x12,           ///< ::ze_graph_argument_properties_4_t
 
     ZE_STRUCTURE_TYPE_GRAPH_ACTIVATION_KERNEL = 0x5,                ///< ::ze_graph_activation_kernel_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_METADATA = 0x6,                ///< ::ze_graph_argument_metadata_t
@@ -97,6 +99,7 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_property_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES_2 = 0x13,              ///< ::ze_graph_argument_value_strides_2_t
 
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
 
@@ -248,10 +251,14 @@ typedef enum _ze_graph_argument_type_t
 #endif // ZE_MAX_GRAPH_ARGUMENT_NAME
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum supported tensor rank for graph argument dims/shape/strides arrays
 #ifndef ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE
-/// @brief Maximum device name string size
 #define ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE 5
-#endif // ZE_MAX_GRAPH_ARGUMENT_SIZE
+#endif // ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE
+
+#ifndef ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8
+#define ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8 8
+#endif // ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Graph argument properties
@@ -319,7 +326,9 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphSetArgumentValue_ext_t)(
     const void* pArgValue                                           ///< [in] Pointer to graph argument
                                                                     ///< Usage
                                                                     ///<   1. pointer to tensor (backwards compatabile)
-                                                                    ///<   2. pointer to struct containing argument property (v1.15)
+                                                                    ///<   2. pointer to struct ze_graph_argument_value_tensor_t (v1.15)
+                                                                    ///<   3. pointer to struct ze_graph_argument_value_strides_t (upto 5D v1.15)
+                                                                    ///<   4. pointer to struct ze_graph_argument_value_strides_2_t (upto 8D v1.19)
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,12 +352,6 @@ typedef ze_result_t (ZE_APICALL *ze_pfnAppendGraphExecute_ext_t)(
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Extension version 1.1
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef ZE_MAX_GRAPH_TENSOR_REF_DIMS
-/// @brief Maximum tensor reference dimensions size
-#define ZE_MAX_GRAPH_TENSOR_REF_DIMS 8
-#endif // ZE_MAX_GRAPH_TENSOR_REF_DIMS
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_GRAPH_TENSOR_NAMES_SIZE
@@ -391,7 +394,7 @@ typedef struct _ze_graph_argument_metadata_t
     ze_graph_argument_type_t type;                                  ///< [out] type of argument
     char friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];                 ///< [out] friendly name
     ze_graph_metadata_type data_type;                               ///< [out] data type of argument
-    uint64_t shape[ZE_MAX_GRAPH_TENSOR_REF_DIMS];                   ///< [out] tensor shape
+    uint64_t shape[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8];        ///< [out] tensor shape
     uint32_t shape_size;                                            ///< [out] size of shape array
     char tensor_names[ZE_MAX_GRAPH_TENSOR_NAMES_SIZE][ZE_MAX_GRAPH_ARGUMENT_NAME]; ///< [out] tensor name array
     uint32_t tensor_names_count;                                    ///< [out] size of tensor name array
@@ -836,7 +839,7 @@ typedef struct _ze_graph_argument_value_strides_t
 {
     ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
     void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    uint32_t userStrides[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];    ///< [in] arguments strides
+    uint32_t userStrides[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];    ///< [in] arguments strides upto 5D
 
 } ze_graph_argument_value_strides_t;
 
@@ -852,6 +855,63 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphEvict_ext_t)(
                                                                     ///<   2. Inferences currently executing on device will not evict memory
                                                                     ///<   3. For optimal results, host synchronize before calling
     );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.19
+///
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Graph name queried through pNext of ze_graph_properties_t
+typedef struct _ze_graph_name_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name of network
+
+} ze_graph_name_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Identical to ze_graph_argument_properties_3_t except dims supports 8D
+typedef struct _ze_graph_argument_properties_4_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
+    ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
+    uint32_t dims[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8];         ///< [out] tensor dimensions upto 8D
+    ze_graph_argument_precision_t networkPrecision;                 ///< [out] precision from input IR
+    ze_graph_argument_layout_t networkLayout;                       ///< [out] layout from input IR
+    ze_graph_argument_precision_t devicePrecision;                  ///< [out] precision from compiled executable
+    ze_graph_argument_layout_t deviceLayout;                        ///< [out] layout from compiled executable
+
+    // version 2
+    float quantReverseScale;                                        ///< [out] Quantized tensor reverse scale value for input argument
+    uint8_t quantZeroPoint;                                         ///< [out] Quantized tesnor zero point value for input argument
+
+    // version 3
+    uint32_t dims_count;                                            ///< [out] size of shape array
+    char debug_friendly_name[ZE_MAX_GRAPH_ARGUMENT_NAME];           ///< [out] debug friendly name
+    char associated_tensor_names[ZE_MAX_GRAPH_TENSOR_NAMES_SIZE][ZE_MAX_GRAPH_ARGUMENT_NAME]; ///< [out] tensor name array
+    uint32_t associated_tensor_names_count;                         ///< [out] size of tensor name array
+
+} ze_graph_argument_properties_4_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_4_t)(
+    ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
+    uint32_t argIndex,                                              ///< [in] index of the argument to get properties
+    ze_graph_argument_properties_4_t* pGraphArgumentProperties      ///< [in,out] query result for graph argument properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_value_strides_2_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    uint32_t userStrides[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8];  ///< [in] arguments strides upto 8D
+
+} ze_graph_argument_value_strides_2_t;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
@@ -925,6 +985,15 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.16
     ze_pfnGraphEvict_ext_t                                          pfnEvict;
+
+    // version 1.17
+    // no API change, added ze_graph_flags_t::ZE_GRAPH_FLAG_SECURE_COMPILE
+
+    // version 1.18
+    // no API change, added ze_graph_flags_t::ZE_GRAPH_FLAG_OPTIMIZE_FOR_DYNAMIC_SHAPES
+
+    // version 1.19
+    ze_pfnGraphGetArgumentProperties_ext_4_t                        pfnGetArgumentProperties4;
 
 } ze_graph_dditable_ext_t;
 

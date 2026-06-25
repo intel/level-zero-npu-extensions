@@ -49,7 +49,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
     ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_18,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_19,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -60,6 +61,7 @@ typedef enum _ze_graph_format_t
 {
     ZE_GRAPH_FORMAT_NATIVE = 0x1,                                   ///< Format is pre-compiled blob (elf, flatbuffers)
     ZE_GRAPH_FORMAT_NGRAPH_LITE = 0x2,                              ///< Format is ngraph lite IR
+    ZE_GRAPH_FORMAT_NATIVE_PIPELINE = 0x3,                          ///< Format is native pipeline to be stitched together
     ZE_GRAPH_FORMAT_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_format_t;
@@ -99,6 +101,9 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
 
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
+
+    ZE_STRUCTURE_TYPE_GRAPH_SCHEDULE_STEP_DESC = 0x12,              ///< ::ze_graph_schedule_step_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_SCHEDULE_COMBINE_DESC = 0x13,           ///< ::ze_graph_schedule_combine_desc_t
 
     ZE_STRUCTURE_TYPE_GRAPH_FORCE_UINT32 = 0x7fffffff
 
@@ -523,7 +528,7 @@ typedef enum _ze_graph_flags_t
                                                                     ///<   1. Invalidating before destroying graph handle results in undefined behavior
                                                                     ///<   2. inputSize and pInput address must be page-aligned
                                                                     ///<   3. non-aligned values will result in ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
-    ZE_GRAPH_FLAG_SECURE_COMPILE = ZE_BIT(3),                       ///< Compile graph in secure mode where the driver applies additional protections to the compilation process                                                                     
+    ZE_GRAPH_FLAG_SECURE_COMPILE = ZE_BIT(3),                       ///< Compile graph in secure mode where the driver applies additional protections to the compilation process
     ZE_GRAPH_FLAG_OPTIMIZE_FOR_DYNAMIC_SHAPES = ZE_BIT(4),          ///< Driver will cache strides and re-apply when arguments are mutated, no need to set strides when they haven't changed
 
     ZE_GRAPH_FLAG_FORCE_UINT32 = 0x7fffffff
@@ -854,6 +859,58 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphEvict_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.17
+///
+/// Adds ze_graph_schedule_step_desc_t and ze_graph_schedule_combine_desc_t. A
+/// ze_graph_schedule_combine_desc_t is chained through ze_graph_desc_2_t::pNext and carries an
+/// array of steps, for running a sequence of schedule-builder transformation passes against a
+/// single graph build. No new entry points are added: the whole pipeline is built and combined
+/// inside one ::pfnCreate2 call, and the combined result is retrieved through the existing
+/// ::pfnGetNativeBinary / ::pfnGetNativeBinary2.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief One step of a schedule-builder pipeline
+///
+/// @details
+///     - Steps are stored in ::ze_graph_schedule_combine_desc_t::pSteps, in pipeline order.
+///     - The outer ::ze_graph_desc_2_t itself represents step 0 of the pipeline, using its
+///       existing pInput/inputSize/pBuildFlags fields; pSteps[0] represents step 1, and so on.
+///     - Set pInput to nullptr (and inputSize to 0) to apply this step's option to the blob
+///       introduced by the previous step (or the outer desc, if this is the first step) in place,
+///       instead of introducing a new blob. Use this to chain multiple sequential passes (e.g.
+///       io_reuse then io_iterate) against the same underlying blob.
+typedef struct _ze_graph_schedule_step_desc_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null
+    size_t inputSize;                                               ///< [in][optional] size of this step's input blob in bytes; 0 to apply
+                                                                    ///< this step's option to the previous blob in place
+    const uint8_t* pInput;                                          ///< [in][optional] pointer to this step's input blob; nullptr to apply
+                                                                    ///< this step's option to the previous blob in place
+    uint32_t option;                                                ///< [in] transformation pass to apply (BuilderOption value)
+    const char* pOptionParameter;                                   ///< [in][optional] null terminated string containing the option parameter
+
+} ze_graph_schedule_step_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Terminal node of a schedule-builder pipeline, chained via ::ze_graph_desc_2_t::pNext
+///
+/// @details
+///     - Applied across every blob gathered from ::ze_graph_desc_2_t and all steps in pSteps.
+///     - pNext must be null.
+typedef struct _ze_graph_schedule_combine_desc_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null
+    size_t count;                                                   ///< [in][optional] number of entries in pSteps
+    ze_graph_schedule_step_desc_t* pSteps;                          ///< [in][optional] array of steps to apply, in pipeline order,
+                                                                    ///< after the outer ze_graph_desc_2_t (step 0)
+    ze_bool_t fuseElf;                                              ///< [in] fuse all gathered blobs into a single elf
+    const char* pConsolidateParams;                                 ///< [in][optional] null terminated string containing consolidate parameters
+
+} ze_graph_schedule_combine_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -925,6 +982,9 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.16
     ze_pfnGraphEvict_ext_t                                          pfnEvict;
+
+    // version 1.17
+    // no API change, added ze_graph_schedule_step_desc_t / ze_graph_schedule_combine_desc_t chained through pfnCreate2
 
 } ze_graph_dditable_ext_t;
 

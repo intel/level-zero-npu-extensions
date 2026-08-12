@@ -49,7 +49,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
     ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_18,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_19,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -150,6 +151,7 @@ typedef enum _ze_graph_argument_precision_t
     ZE_GRAPH_ARGUMENT_PRECISION_BOOLEAN = 0x0E,
 
     ZE_GRAPH_ARGUMENT_PRECISION_NF4 = 0x12,
+    ZE_GRAPH_ARGUMENT_PRECISION_FP4_E2M1 = 0x18,
 
     ZE_GRAPH_ARGUMENT_PRECISION_FORCE_UINT32 = 0x7fffffff
 

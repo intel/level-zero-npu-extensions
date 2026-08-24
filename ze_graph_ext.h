@@ -50,7 +50,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
     ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
     ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_19,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_20 = ZE_MAKE_VERSION( 1, 20),            ///< version 1.20
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_20,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -278,6 +279,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. Use ::ze_pfnGraphCreate_ext_2_t (pfnCreate2) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_t)(
     ze_context_handle_t hContext,                                   ///< [in] handle of the context
     ze_device_handle_t hDevice,                                     ///< [in] handle of the device
@@ -308,6 +310,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. Use ::ze_pfnGraphGetArgumentProperties_ext_3_t (pfnGetArgumentProperties3) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to get properties
@@ -421,6 +424,7 @@ typedef struct _ze_graph_argument_properties_2_t
 } ze_graph_argument_properties_2_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. Use ::ze_pfnGraphGetArgumentProperties_ext_3_t (pfnGetArgumentProperties3) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_2_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to get properties
@@ -476,6 +480,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_3_t)(
 /// @brief Handle of driver's graph query network object
 typedef struct _ze_graph_query_network_handle_t *ze_graph_query_network_handle_t;
 
+/// @deprecated since ext 1.20. Use ::ze_pfnGraphQueryNetworkCreate_ext_2_t (pfnQueryNetworkCreate2) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphQueryNetworkCreate_ext_t)(
     ze_context_handle_t hContext,                                   ///< [in] handle of the context object
     ze_device_handle_t hDevice,                                     ///< [in] handle of the device
@@ -626,6 +631,7 @@ typedef struct _ze_device_graph_properties_2_t
 } ze_device_graph_properties_2_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. No known caller adopted this; use ::ze_pfnDeviceGetGraphProperties_ext_t (pfnDeviceGetGraphProperties) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnDeviceGetGraphProperties_ext_2_t)(
     ze_device_handle_t hDevice,                                     ///< [in] handle of the device
     ze_device_graph_properties_2_t *pDeviceGraphProperties          ///< [out] query result for graph properties of the device
@@ -735,6 +741,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnIsOptionSupported_ext_t)(
 typedef struct _ze_graph_build_log_handle_t *ze_graph_build_log_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. No known caller adopted this; use ::ze_pfnGraphCreate_ext_2_t (pfnCreate2) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphCreate_ext_3_t)(
     ze_context_handle_t hContext,                                   ///< [in] handle of the context
     ze_device_handle_t hDevice,                                     ///< [in] handle of the device
@@ -778,6 +785,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetProperties_ext_3_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. No known caller adopted this; use ::ze_pfnGraphBuildLogGetString_ext_t (pfnBuildLogGetString) instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_2_t)(
     ze_graph_build_log_handle_t hGraphBuildLog,                     ///< [in] handle of the graph build log
     uint32_t* pSize,                                                ///< [in,out] pointer to the size of the error message
@@ -789,6 +797,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogGetString_ext_2_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.20. No known caller adopted this; no replacement.
 typedef ze_result_t (ZE_APICALL *ze_pfnGraphBuildLogDestroy_ext_t)(
     ze_graph_build_log_handle_t hGraphBuildLog                      ///< [in][release] handle of graph log object to destroy
     );
@@ -860,10 +869,10 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphEvict_ext_t)(
 typedef struct _ze_graph_dditable_ext_t
 {
     // version 1.0
-    ze_pfnGraphCreate_ext_t                                         pfnCreate;
+    ze_pfnGraphCreate_ext_t                                         pfnCreate;                     ///< @deprecated 1.20, use pfnCreate2
     ze_pfnGraphDestroy_ext_t                                        pfnDestroy;
     ze_pfnGraphGetProperties_ext_t                                  pfnGetProperties;
-    ze_pfnGraphGetArgumentProperties_ext_t                          pfnGetArgumentProperties;
+    ze_pfnGraphGetArgumentProperties_ext_t                          pfnGetArgumentProperties;      ///< @deprecated 1.20, use pfnGetArgumentProperties3
     ze_pfnGraphSetArgumentValue_ext_t                               pfnSetArgumentValue;
     ze_pfnAppendGraphInitialize_ext_t                               pfnAppendGraphInitialize;
     ze_pfnAppendGraphExecute_ext_t                                  pfnAppendGraphExecute;
@@ -872,13 +881,13 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.1
     ze_pfnGraphGetArgumentMetadata_ext_t                            pfnGraphGetArgumentMetadata;
-    ze_pfnGraphGetArgumentProperties_ext_2_t                        pfnGetArgumentProperties2;
+    ze_pfnGraphGetArgumentProperties_ext_2_t                        pfnGetArgumentProperties2;     ///< @deprecated 1.20, use pfnGetArgumentProperties3
 
     // version 1.2
     ze_pfnGraphGetArgumentProperties_ext_3_t                        pfnGetArgumentProperties3;
 
     // version 1.3
-    ze_pfnGraphQueryNetworkCreate_ext_t                             pfnQueryNetworkCreate;
+    ze_pfnGraphQueryNetworkCreate_ext_t                             pfnQueryNetworkCreate;         ///< @deprecated 1.20, use pfnQueryNetworkCreate2
     ze_pfnGraphQueryNetworkDestroy_ext_t                            pfnQueryNetworkDestroy;
     ze_pfnGraphQueryNetworkGetSupportedLayers_ext_t                 pfnQueryNetworkGetSupportedLayers;
 
@@ -891,7 +900,7 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnGraphQueryContextMemory_ext_t                             pfnQueryContextMemory;
 
     // version 1.6
-    ze_pfnDeviceGetGraphProperties_ext_2_t                          pfnDeviceGetGraphProperties2;
+    ze_pfnDeviceGetGraphProperties_ext_2_t                          pfnDeviceGetGraphProperties2;  ///< @deprecated 1.20, never adopted, use pfnDeviceGetGraphProperties
 
     // version 1.7
     ze_pfnGraphGetNativeBinary_ext_2_t                              pfnGetNativeBinary2;
@@ -911,10 +920,10 @@ typedef struct _ze_graph_dditable_ext_t
     ze_pfnIsOptionSupported_ext_t                                   pfnCompilerIsOptionSupported;
 
     // version 1.12
-    ze_pfnGraphCreate_ext_3_t                                       pfnCreate3;
+    ze_pfnGraphCreate_ext_3_t                                       pfnCreate3;                    ///< @deprecated 1.20, never adopted, use pfnCreate2
     ze_pfnGraphGetProperties_ext_3_t                                pfnGetProperties3;
-    ze_pfnGraphBuildLogGetString_ext_2_t                            pfnBuildLogGetString2;
-    ze_pfnGraphBuildLogDestroy_ext_t                                pfnBuildLogDestroy;
+    ze_pfnGraphBuildLogGetString_ext_2_t                            pfnBuildLogGetString2;         ///< @deprecated 1.20, never adopted, use pfnBuildLogGetString
+    ze_pfnGraphBuildLogDestroy_ext_t                                pfnBuildLogDestroy;            ///< @deprecated 1.20, never adopted, no replacement
 
     // version 1.13
     // no API change, added ZE_GRAPH_FLAG_INPUT_GRAPH_PERSISTENT flag

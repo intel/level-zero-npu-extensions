@@ -56,6 +56,7 @@ typedef struct _ze_command_queue_desc_npu_ext_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Command Queue Workload Type
+/// @deprecated since ext 1.2. Use ::zeCommandQueueSetPriorityExt instead.
 typedef enum _ze_command_queue_workload_type_t
 {
     ZE_WORKLOAD_TYPE_DEFAULT = 0x0,
@@ -66,6 +67,7 @@ typedef enum _ze_command_queue_workload_type_t
 } ze_command_queue_workload_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @deprecated since ext 1.2. Use ::zeCommandQueueSetPriorityExt instead.
 typedef ze_result_t (ZE_APICALL *ze_pfnCommandQueueSetWorkloadType_ext_t)(
     ze_command_queue_handle_t hCommandQueue,                ///< [in] handle of the device
     ze_command_queue_workload_type_t workloadType           ///< [in] workload type
@@ -102,7 +104,7 @@ typedef struct _ze_command_queue_desc_npu_ext_2_t
 typedef struct _ze_command_queue_npu_dditable_ext_t
 {
     // version 1.0
-    ze_pfnCommandQueueSetWorkloadType_ext_t pfnSetWorkloadType;
+    ze_pfnCommandQueueSetWorkloadType_ext_t pfnSetWorkloadType;    ///< @deprecated 1.2, use zeCommandQueueSetPriorityExt
 
 } ze_command_queue_npu_dditable_ext_t;
 

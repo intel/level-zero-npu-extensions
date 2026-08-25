@@ -29,7 +29,8 @@ typedef enum _ze_command_queue_npu_ext_version_t
 {
     ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),                     ///< version 1.0
     ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_1 = ZE_MAKE_VERSION( 1, 1 ),                     ///< version 1.1
-    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_CURRENT = ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_1,    ///< latest known version
+    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_2 = ZE_MAKE_VERSION( 1, 2 ),                     ///< version 1.2
+    ZE_COMMAND_QUEUE_NPU_EXT_VERSION_CURRENT = ZE_COMMAND_QUEUE_NPU_EXT_VERSION_1_2,    ///< latest known version
     ZE_COMMAND_QUEUE_NPU_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_command_queue_npu_ext_version_t;
@@ -98,11 +99,62 @@ typedef struct _ze_command_queue_desc_npu_ext_2_t
 } ze_command_queue_desc_npu_ext_2_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.2
+///
+/// Adds queue-level external semaphore signal/wait, mirroring the proposed
+/// core spec functions zeCommandQueueSignal/WaitExternalSemaphoreExt from
+/// GSD-12455. Hosted here as an NPU-private extension until the spec change
+/// lands in core ze_api.h, after which these are expected to be deprecated
+/// in favour of the core variants.
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Signals one or more external semaphores at the command queue level.
+///
+/// @details
+///     - The op is queued on the command queue and honoured at the next
+///       submission boundary (HWS native-fence inline command).
+///     - hSignalEvent and phWaitEvents are reserved for future use; the
+///       implementation rejects non-default values with
+///       ZE_RESULT_ERROR_INVALID_ARGUMENT until the spec finalizes.
+typedef ze_result_t ( ZE_APICALL *ze_pfnCommandQueueSignalExternalSemaphoreExt_t )(
+    ze_command_queue_handle_t hCommandQueue,                            ///< [in] handle of the command queue
+    uint32_t numSemaphores,                                             ///< [in] number of external semaphores
+    ze_external_semaphore_ext_handle_t *phSemaphores,                   ///< [in][range(0, numSemaphores)] array of imported semaphore handles
+    ze_external_semaphore_signal_params_ext_t *signalParams,            ///< [in][range(0, numSemaphores)] per-semaphore signal parameters
+    ze_event_handle_t hSignalEvent,                                     ///< [in][optional] reserved; must be nullptr
+    uint32_t numWaitEvents,                                             ///< [in][optional] reserved; must be 0
+    ze_event_handle_t *phWaitEvents                                     ///< [in][optional] reserved; must be nullptr
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Waits on one or more external semaphores at the command queue level.
+///
+/// @details
+///     - The op is queued on the command queue and honoured at the next
+///       submission boundary (HWS native-fence inline command).
+///     - hSignalEvent and phWaitEvents are reserved for future use; the
+///       implementation rejects non-default values with
+///       ZE_RESULT_ERROR_INVALID_ARGUMENT until the spec finalizes.
+typedef ze_result_t ( ZE_APICALL *ze_pfnCommandQueueWaitExternalSemaphoreExt_t )(
+    ze_command_queue_handle_t hCommandQueue,                            ///< [in] handle of the command queue
+    uint32_t numSemaphores,                                             ///< [in] number of external semaphores
+    ze_external_semaphore_ext_handle_t *phSemaphores,                   ///< [in][range(0, numSemaphores)] array of imported semaphore handles
+    ze_external_semaphore_wait_params_ext_t *waitParams,                ///< [in][range(0, numSemaphores)] per-semaphore wait parameters
+    ze_event_handle_t hSignalEvent,                                     ///< [in][optional] reserved; must be nullptr
+    uint32_t numWaitEvents,                                             ///< [in][optional] reserved; must be 0
+    ze_event_handle_t *phWaitEvents                                     ///< [in][optional] reserved; must be nullptr
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Command Queue NPU functions pointers
 typedef struct _ze_command_queue_npu_dditable_ext_t
 {
     // version 1.0
     ze_pfnCommandQueueSetWorkloadType_ext_t pfnSetWorkloadType;
+
+    // version 1.2
+    ze_pfnCommandQueueSignalExternalSemaphoreExt_t pfnSignalExternalSemaphoreExt;
+    ze_pfnCommandQueueWaitExternalSemaphoreExt_t   pfnWaitExternalSemaphoreExt;
 
 } ze_command_queue_npu_dditable_ext_t;
 

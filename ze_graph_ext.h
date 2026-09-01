@@ -536,7 +536,7 @@ typedef enum _ze_graph_flags_t
                                                                     ///<   1. Invalidating before destroying graph handle results in undefined behavior
                                                                     ///<   2. inputSize and pInput address must be page-aligned
                                                                     ///<   3. non-aligned values will result in ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
-    ZE_GRAPH_FLAG_SECURE_COMPILE = ZE_BIT(3),                       ///< Compile graph in secure mode where the driver applies additional protections to the compilation process                                                                     
+    ZE_GRAPH_FLAG_SECURE_COMPILE = ZE_BIT(3),                       ///< Compile graph in secure mode where the driver applies additional protections to the compilation process
     ZE_GRAPH_FLAG_OPTIMIZE_FOR_DYNAMIC_SHAPES = ZE_BIT(4),          ///< Driver will cache strides and re-apply when arguments are mutated, no need to set strides when they haven't changed
 
     ZE_GRAPH_FLAG_FORCE_UINT32 = 0x7fffffff
@@ -875,8 +875,6 @@ typedef struct _ze_graph_argument_properties_4_t
 {
     ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
     void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    char name[ZE_MAX_GRAPH_ARGUMENT_NAME];                          ///< [out] name from input IR
-    char debugFriendlyName[ZE_MAX_GRAPH_ARGUMENT_NAME];             ///< [out] debug friendly name
     ze_graph_argument_type_t type;                                  ///< [out] type of graph argument
     ze_graph_argument_precision_t precision;                        ///< [out] precision of the compiled argument
     ze_graph_argument_layout_t layout;                              ///< [out] layout of the compiled argument
@@ -892,16 +890,29 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentProperties_ext_4_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentAssociatedTensorNames_ext_t)(
+/// @brief Graph argument query name types
+typedef enum _ze_graph_argument_name_type_t
+{
+    ZE_GRAPH_ARGUMENT_NAME = 0x01,                                 ///< Argument name
+    ZE_GRAPH_ARGUMENT_DEBUG_FRIENDLY_NAME = 0x02,                  ///< Debug friendly name of the argument
+    ZE_GRAPH_ARGUMENT_ASSOCIATED_TENSOR_NAMES = 0x03,              ///< Associated tensor names for the argument
+    ZE_GRAPH_ARGUMENT_NAME_TYPE_FORCE_UINT32 = 0x7fffffff
+
+} ze_graph_argument_name_type_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentNames_ext_t)(
     ze_graph_handle_t hGraph,                                       ///< [in] handle of the graph object
     uint32_t argIndex,                                              ///< [in] index of the argument to query
-    size_t* pSize,                                                  ///< [in,out] size of pAssociatedTensorNames buffer in bytes
-    char* pAssociatedTensorNames                                    ///< [in,out][optional] null-terminated, newline-delimited list of
-                                                                    ///< tensor names associated with this argument
+    ze_graph_argument_name_type_t nameType,                         ///< [in] type of the argument name to query
+    size_t* pSize,                                                  ///< [in,out] size of pNames buffer in bytes
+    char* pNames                                                    ///< [in,out][optional] null-terminated name(s) associated with this argument
                                                                     ///< Usage
-                                                                    ///<   1. Call first to query required size of pAssociatedTensorNames (pAssociatedTensorNames is nullptr)
-                                                                    ///<   2. Allocate pAssociatedTensorNames of required size
-                                                                    ///<   3. Call second time to retrieve pAssociatedTensorNames (caller owns the memory)
+                                                                    ///<   1. Call first to query required size of pNames (pNames is nullptr)
+                                                                    ///<   2. Allocate pNames of required size
+                                                                    ///<   3. Call second time to retrieve pNames (caller owns the memory)
+                                                                    ///< Note: Associated tensor names are returned as a comma separated list of null-terminated strings.
+                                                                    ///<       The caller is responsible for parsing the string to extract individual tensor names.
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -997,7 +1008,7 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.20
     ze_pfnGraphGetArgumentProperties_ext_4_t                        pfnGetArgumentProperties4;
-    ze_pfnGraphGetArgumentAssociatedTensorNames_ext_t               pfnGetArgumentAssociatedTensorNames;
+    ze_pfnGraphGetArgumentNames_ext_t                               pfnGetArgumentNames;
 
 } ze_graph_dditable_ext_t;
 

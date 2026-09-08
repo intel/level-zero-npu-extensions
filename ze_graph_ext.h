@@ -44,14 +44,15 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_11 = ZE_MAKE_VERSION( 1, 11 ),           ///< version 1.11
     ZE_GRAPH_EXT_VERSION_1_12 = ZE_MAKE_VERSION( 1, 12 ),           ///< version 1.12
     ZE_GRAPH_EXT_VERSION_1_13 = ZE_MAKE_VERSION( 1, 13 ),           ///< version 1.13
-    ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14),            ///< version 1.14
-    ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15),            ///< version 1.15
-    ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16),            ///< version 1.16
-    ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17),            ///< version 1.17
-    ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18),            ///< version 1.18
-    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
-    ZE_GRAPH_EXT_VERSION_1_20 = ZE_MAKE_VERSION( 1, 20),            ///< version 1.20
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_20,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_14 = ZE_MAKE_VERSION( 1, 14 ),           ///< version 1.14
+    ZE_GRAPH_EXT_VERSION_1_15 = ZE_MAKE_VERSION( 1, 15 ),           ///< version 1.15
+    ZE_GRAPH_EXT_VERSION_1_16 = ZE_MAKE_VERSION( 1, 16 ),           ///< version 1.16
+    ZE_GRAPH_EXT_VERSION_1_17 = ZE_MAKE_VERSION( 1, 17 ),           ///< version 1.17
+    ZE_GRAPH_EXT_VERSION_1_18 = ZE_MAKE_VERSION( 1, 18 ),           ///< version 1.18
+    ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19 ),           ///< version 1.19
+    ZE_GRAPH_EXT_VERSION_1_20 = ZE_MAKE_VERSION( 1, 20 ),           ///< version 1.20
+    ZE_GRAPH_EXT_VERSION_1_21 = ZE_MAKE_VERSION( 1, 21 ),           ///< version 1.21
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_21,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -101,6 +102,7 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES_2 = 0x13,              ///< ::ze_graph_argument_value_strides_2_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR_2 = 0x14,               ///< ::ze_graph_argument_value_tensor_2_t
 
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
 
@@ -333,6 +335,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphSetArgumentValue_ext_t)(
                                                                     ///<   2. pointer to struct ze_graph_argument_value_tensor_t (v1.15)
                                                                     ///<   3. pointer to struct ze_graph_argument_value_strides_t, upto 5D (v1.15)
                                                                     ///<   4. pointer to struct ze_graph_argument_value_strides_2_t, upto 8D (v1.20)
+                                                                    ///<   5. pointer to struct ze_graph_argument_value_tensor_2_t (v1.21)
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -925,6 +928,20 @@ typedef struct _ze_graph_argument_value_strides_2_t
 } ze_graph_argument_value_strides_2_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.21
+///
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_value_tensor_2_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    const void* pTensor;                                            ///< [in] gpuva of IO tensor
+    uint64_t size;                                                  ///< [in] number of bytes the driver may access starting at pTensor
+
+} ze_graph_argument_value_tensor_2_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
 typedef struct _ze_graph_dditable_ext_t
 {
@@ -1009,6 +1026,9 @@ typedef struct _ze_graph_dditable_ext_t
     // version 1.20
     ze_pfnGraphGetArgumentProperties_ext_4_t                        pfnGetArgumentProperties4;
     ze_pfnGraphGetArgumentNames_ext_t                               pfnGetArgumentNames;
+
+    // version 1.21
+    // added ze_graph_argument_value_tensor_2_t for specifying tensor size
 
 } ze_graph_dditable_ext_t;
 

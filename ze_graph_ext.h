@@ -100,7 +100,6 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_STRIDES = 0x9,        ///< ::ze_graph_argument_property_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
-    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES_2 = 0x13,              ///< ::ze_graph_argument_value_strides_2_t
 
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
 
@@ -914,15 +913,6 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentNames_ext_t)(
                                                                     ///< Note: Associated tensor names are returned as a comma separated list of null-terminated strings.
                                                                     ///<       The caller is responsible for parsing the string to extract individual tensor names.
     );
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef struct _ze_graph_argument_value_strides_2_t
-{
-    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
-    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
-    uint32_t userStrides[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE_8];  ///< [in] argument strides, upto 8D
-
-} ze_graph_argument_value_strides_2_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers

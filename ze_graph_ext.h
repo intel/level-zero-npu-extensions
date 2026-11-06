@@ -52,7 +52,8 @@ typedef enum _ze_graph_ext_version_t
     ZE_GRAPH_EXT_VERSION_1_19 = ZE_MAKE_VERSION( 1, 19),            ///< version 1.19
     ZE_GRAPH_EXT_VERSION_1_20 = ZE_MAKE_VERSION( 1, 20),            ///< version 1.20
     ZE_GRAPH_EXT_VERSION_1_21 = ZE_MAKE_VERSION( 1, 21),            ///< version 1.21
-    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_21,       ///< latest known version
+    ZE_GRAPH_EXT_VERSION_1_22 = ZE_MAKE_VERSION( 1, 22),            ///< version 1.22
+    ZE_GRAPH_EXT_VERSION_CURRENT = ZE_GRAPH_EXT_VERSION_1_22,       ///< latest known version
     ZE_GRAPH_EXT_VERSION_FORCE_UINT32 = 0x7fffffff
 
 } ze_graph_ext_version_t;
@@ -102,6 +103,8 @@ typedef enum _ze_structure_type_graph_ext_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_TENSOR = 0xA,                  ///< ::ze_graph_argument_value_tensor_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_STRIDES = 0xB,                 ///< ::ze_graph_argument_value_strides_t
     ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_SIZE = 0x13,                   ///< ::ze_graph_argument_size_desc_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_PROPERTY_SHAPES = 0x14,        ///< ::ze_graph_argument_property_shapes_t
+    ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_SHAPE = 0x15,                  ///< ::ze_graph_argument_value_shape_t
 
     ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED = 0x7, ///< ::ze_mutable_graph_argument_exp_desc_t
 
@@ -333,6 +336,7 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphSetArgumentValue_ext_t)(
                                                                     ///<   1. pointer to tensor (backwards compatabile)
                                                                     ///<   2. pointer to struct ze_graph_argument_value_tensor_t (v1.15)
                                                                     ///<   3. pointer to struct ze_graph_argument_value_strides_t, upto 5D (v1.15)
+                                                                    ///<      shape values can be provided through ze_graph_argument_value_shape_t in the argument descriptor chain (v1.22)
     );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -922,9 +926,33 @@ typedef ze_result_t (ZE_APICALL *ze_pfnGraphGetArgumentNames_ext_t)(
 typedef struct _ze_graph_argument_size_desc_t
 {
     ze_structure_type_graph_ext_t stype;                            ///< [in] ZE_STRUCTURE_TYPE_GRAPH_ARGUMENT_SIZE
-    const void* pNext;                                              ///< [in][optional] strides or next argument descriptor
+    const void* pNext;                                              ///< [in][optional] shape, strides, or next argument descriptor
     size_t size;                                                    ///< [in] device-access byte span starting at the bound argument address
 } ze_graph_argument_size_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Extension version 1.22
+///
+/// Adds ze_graph_argument_property_shapes_t to query dynamic shape support for graph arguments
+/// Adds ze_graph_argument_value_shape_t to set graph argument shapes through the argument descriptor chain
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_property_shapes_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    void* pNext;                                                    ///< [in,out][optional] must be null or a pointer to an extension-specific
+    bool supportsDynamicShapes;                                    ///< [out] indicates that the argument supports dynamic shapes
+
+} ze_graph_argument_property_shapes_t;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct _ze_graph_argument_value_shape_t
+{
+    ze_structure_type_graph_ext_t stype;                            ///< [in] type of this structure
+    const void* pNext;                                              ///< [in][optional] must be null or a pointer to an extension-specific
+    uint32_t userShape[ZE_MAX_GRAPH_ARGUMENT_DIMENSIONS_SIZE];      ///< [in] argument shape, up to 5D
+
+} ze_graph_argument_value_shape_t;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Graph functions pointers
@@ -1014,6 +1042,9 @@ typedef struct _ze_graph_dditable_ext_t
 
     // version 1.21
     // no new functions, added ze_graph_argument_size_desc_t
+
+    // version 1.22
+    // no new functions, added dynamic shape descriptors
 
 } ze_graph_dditable_ext_t;
 
